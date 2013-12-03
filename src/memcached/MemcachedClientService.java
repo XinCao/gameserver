@@ -6,7 +6,8 @@ import java.util.List;
 import net.spy.memcached.MemcachedClient;
 
 /**
- *
+ * memcached 服务器读取底层
+ * 
  * @author caoxin
  */
 public class MemcachedClientService<T extends Object> {
@@ -14,7 +15,8 @@ public class MemcachedClientService<T extends Object> {
     private MemcachedClient memcachedClient;
 
     /**
-     *
+     * 获得键值
+     * 
      * @param key
      * @return
      */
@@ -23,7 +25,8 @@ public class MemcachedClientService<T extends Object> {
     }
 
     /**
-     *
+     * 获得多个键值
+     * 
      * @param keys
      * @return
      */
@@ -36,7 +39,8 @@ public class MemcachedClientService<T extends Object> {
     }
 
     /**
-     *
+     * 获得多个键值
+     * 
      * @param keys
      * @return
      */
@@ -45,7 +49,8 @@ public class MemcachedClientService<T extends Object> {
     }
 
     /**
-     *
+     * 将键值对保存指定时间 
+     * 
      * @param key
      * @param o
      * @param expireTime
@@ -59,7 +64,8 @@ public class MemcachedClientService<T extends Object> {
     }
 
     /**
-     *
+     *  键值对保存一天
+     * 
      * @param key
      * @param o
      */

@@ -1,33 +1,36 @@
 package memcached;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
 /**
- * 使用memcached范例
+ * 使用memcached范例（使用memcached保存临时数据）
+ *
  * @author caoxin
  */
-public class UseMemcached {
-    
+public class UseMemcached<T extends Object> {
+
     private MemcachedClientService<String> memcachedClientService;
-    private String name;
-    private int age;
-    
-    public void init() {
-        setNameUseMC();
-        setAgeUseMC();
-    }
-    
-    public void setNameUseMC() {
-        name = memcachedClientService.get("name");
-    }
-    
-    public void setAgeUseMC() {
-        age = Integer.getInteger(memcachedClientService.get("age"));
+
+    public void put(T o, String key, String value, Date expireDate) {
+        String clazzName = o.getClass().getSimpleName();
+        memcachedClientService.put(clazzName + key, value, expireDate);
     }
 
-    @Override
-    public String toString() {
-        return "UseMemcached{" + "memcachedClientService=" + memcachedClientService + ", name=" + name + ", age=" + age + '}';
+    public void put(T o, String key, String value) {
+        put(o, key, value, null);
     }
-    
+
+    public String get(T o, String key) {
+        String clazzName = o.getClass().getSimpleName();
+        return memcachedClientService.get(clazzName + key);
+    }
+
+    public Map<String, String> get(T o, List<String> keys) {
+        return memcachedClientService.gets(keys);
+    }
+
     public void setMemcachedClinetService(MemcachedClientService memcachedClientService) {
         this.memcachedClientService = memcachedClientService;
     }
