@@ -83,6 +83,10 @@
         <constructor-arg ref="dataSource" />
     </bean>-->
     
+<!--    <bean id="namedParameterJdbcDaoSupport" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport">
+        <property name="dataSource"><ref bean="dataSource"/></property>
+    </bean>-->
+    
     <bean name="sqlCachedContainer" class="dao.sql.SqlCachedContainer"></bean>
     <bean name="sqlSupport" class="dao.sql.SqlSupport">
         <property name="sqlCachedContainer">

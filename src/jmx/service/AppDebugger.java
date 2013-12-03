@@ -1,10 +1,15 @@
-package jms.service;
+package jmx.service;
 
 import org.springframework.jmx.export.annotation.ManagedOperation;
 import org.springframework.jmx.export.annotation.ManagedOperationParameter;
 import org.springframework.jmx.export.annotation.ManagedOperationParameters;
 import org.springframework.jmx.export.annotation.ManagedResource;
 
+/**
+ * 远程代理bean服务器调用
+ * 
+ * @author caoxin
+ */
 @ManagedResource(objectName = "AppDebugger", description = "应用程序调试接口")
 public class AppDebugger {
     

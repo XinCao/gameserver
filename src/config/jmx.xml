@@ -23,17 +23,21 @@
     </bean>
 
     <!-- MBeanServerFactoryBean -->
-    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean"></bean>
+    <bean id="mbeanServer" class="org.springframework.jmx.support.MBeanServerFactoryBean"/>
 
     <!-- HttpAdaptor & XSLTProcessor -->
     <bean id="httpAdaptor" class="mx4j.tools.adaptor.http.HttpAdaptor">
-        <property name="host" value="127.0.0.1" />
-        <property name="port" value="23765" />
+        <property name="host">
+            <value>${jmx.host}</value>
+        </property>
+        <property name="port">
+            <value>${jmx.port}</value>
+        </property>
     </bean>
     
-    <!--自己定义-->
-    <bean id="jmsManager" class="jms.JmsManager">
+    <bean id="jmxManager" class="jmx.JmxManager">
         <property name="httpAdaptor" ref="httpAdaptor" />
     </bean>
-    <bean id="serverListen" class="jms.service.AppDebugger"/>
+    <!--自己定义-->
+    <bean id="serverListen" class="jmx.service.AppDebugger"/>
 </beans>

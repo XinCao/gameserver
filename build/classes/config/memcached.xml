@@ -10,7 +10,7 @@
     <util:list id="inetSocketAddressList">
         <bean  class="java.net.InetSocketAddress">
             <constructor-arg>
-                <value>11211</value>
+                <value>${memcached.port}</value>
             </constructor-arg>
         </bean>
     </util:list>
@@ -27,7 +27,7 @@
         </property>
     </bean>
     
-    <bean id="useMemcached" class="memcached.UseMemcached" init-method="init">
+    <bean id="useMemcached" class="memcached.UseMemcached">
         <property name="memcachedClinetService">
             <ref bean="memcachedClientService"/>
         </property>
