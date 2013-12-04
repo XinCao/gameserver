@@ -9,9 +9,9 @@ import javolution.util.FastMap;
  *
  * @author caoxin
  */
-public class SqlCachedContainer<C extends Object> {
+public class SqlCachedContainer<C> {
 
-    private Map<String, Map<String, String>> cachedSql = new FastMap<String, Map<String, String>>().shared();
+    private final Map<String, Map<String, String>> cachedSql = new FastMap<String, Map<String, String>>().shared();
 
     /**
      * 读取sql
@@ -38,9 +38,6 @@ public class SqlCachedContainer<C extends Object> {
      */
     public void putSql(C c, String flag, String sql) {
         Map<String, String> classSqlMap = getClassSqlMap(c);
-        if (classSqlMap.containsKey(flag)) {
-            return;
-        }
         classSqlMap.put(flag, sql);
     }
 

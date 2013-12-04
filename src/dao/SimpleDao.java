@@ -1,30 +1,23 @@
 package dao;
 
-import dao.core.BaseDaoSupport;
+import dao.sql.SqlSupport;
+import dao.sql.SqlType;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport;
 
 /**
  *
  * @author caoxin
  */
-public class SimpleDao extends BaseDaoSupport {
+public class SimpleDao extends NamedParameterJdbcDaoSupport {
 
-    private static String insertSql = "insert";
-    private static String deleteSql = "delete";
-    private static String updateSql = "update";
-    private static String selectSql = "select";
-
-    public void Simple() {
-        insertSql = sqlSupport.getSqlInCachedPool(this, insertSql);
-        deleteSql = sqlSupport.getSqlInCachedPool(this, deleteSql);
-        updateSql = sqlSupport.getSqlInCachedPool(this, updateSql);
-        selectSql = sqlSupport.getSqlInCachedPool(this, selectSql);
-    }
+    private SqlSupport<SimpleDao> sqlSupport;
+    private String insertSql  = sqlSupport.getSqlInCachedPool(this, SqlType.insertSql);
 
     public void insert() {
         SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -34,7 +27,7 @@ public class SimpleDao extends BaseDaoSupport {
         paramsMap.put("role_name", "admin");
         paramsMap.put("create_date", df.format(new Date()));
         paramsMap.put("is_valied", "1");
-        this.namedParameterJdbcTemplate.update(insertSql, paramsMap);
+        getNamedParameterJdbcTemplate().update(insertSql, paramsMap);
     }
 
     public static void main(String... args) {

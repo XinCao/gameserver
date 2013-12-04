@@ -19,14 +19,14 @@ public class JmxManager {
         try {
             this.httpAdaptor.start();
         } catch (IOException e) {
-            logger.error("启动了jms系统出错！" + e.getMessage());
+            logger.error("启动了jmx系统出错！" + e.getMessage());
         }
-        logger.info("已经成功开启jms系统！");
+        logger.info("已经成功开启jmx系统！");
     }
 
     public void stopJmxService() {
         this.httpAdaptor.stop();
-        logger.info("已经成功关闭jms系统！");
+        logger.info("已经成功关闭jmx系统！");
     }
 
     public void setHttpAdaptor(HttpAdaptor httpAdaptor) {
