@@ -1,5 +1,6 @@
 package memcached;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 import java.util.List;
@@ -10,7 +11,7 @@ import net.spy.memcached.MemcachedClient;
  * 
  * @author caoxin
  */
-public class MemcachedClientService<T extends Object> {
+public class MemcachedClientService<V extends Object & Serializable> {
 
     private MemcachedClient memcachedClient;
 
@@ -20,8 +21,8 @@ public class MemcachedClientService<T extends Object> {
      * @param key
      * @return
      */
-    public T get(String key) {
-        return (T) memcachedClient.get(key);
+    public V get(String key) {
+        return (V) memcachedClient.get(key);
     }
 
     /**
@@ -30,12 +31,12 @@ public class MemcachedClientService<T extends Object> {
      * @param keys
      * @return
      */
-    public Map<String, T> gets(String[] keys) {
+    public Map<String, V> gets(String[] keys) {
         Object rs = memcachedClient.getBulk(keys);
         if (rs == null) {
             return null;
         }
-        return (Map<String, T>) rs;
+        return (Map<String, V>) rs;
     }
 
     /**
@@ -44,7 +45,7 @@ public class MemcachedClientService<T extends Object> {
      * @param keys
      * @return
      */
-    public Map<String, T> gets(List<String> keys) {
+    public Map<String, V> gets(List<String> keys) {
         return gets((String[]) (keys.toArray()));
     }
 
@@ -55,7 +56,7 @@ public class MemcachedClientService<T extends Object> {
      * @param o
      * @param expireTime
      */
-    public void put(String key, T o, Date expireDate) {
+    public void put(String key, V o, Date expireDate) {
         int expireTime = 24 * 60 * 60;
         if (expireDate != null) {
             expireTime = (int) ((expireDate.getTime() - System.currentTimeMillis()) / 1000.0);
@@ -69,7 +70,7 @@ public class MemcachedClientService<T extends Object> {
      * @param key
      * @param o
      */
-    public void put(String key, T o) {
+    public void put(String key, V o) {
         put(key, o, null);
     }
 

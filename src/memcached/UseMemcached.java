@@ -1,5 +1,6 @@
 package memcached;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -9,25 +10,25 @@ import java.util.Map;
  *
  * @author caoxin
  */
-public class UseMemcached<T extends Object> {
+public class UseMemcached<T extends Object, V extends Object & Serializable> {
 
-    private MemcachedClientService<String> memcachedClientService;
+    private MemcachedClientService<V> memcachedClientService;
 
-    public void put(T o, String key, String value, Date expireDate) {
+    public void put(T o, String key, V v, Date expireDate) {
         String clazzName = o.getClass().getSimpleName();
-        memcachedClientService.put(clazzName + key, value, expireDate);
+        memcachedClientService.put(clazzName + key, v, expireDate);
     }
 
-    public void put(T o, String key, String value) {
-        put(o, key, value, null);
+    public void put(T o, String key, V v) {
+        put(o, key, v, null);
     }
 
-    public String get(T o, String key) {
+    public V get(T o, String key) {
         String clazzName = o.getClass().getSimpleName();
         return memcachedClientService.get(clazzName + key);
     }
 
-    public Map<String, String> get(T o, List<String> keys) {
+    public Map<String, V> get(T o, List<String> keys) {
         return memcachedClientService.gets(keys);
     }
 
