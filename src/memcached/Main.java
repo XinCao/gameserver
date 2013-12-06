@@ -11,7 +11,6 @@ public class Main {
 
     public static void main(String ...args) {
         ApplicationContext ac = new FileSystemXmlApplicationContext("./config/app.xml");
-        MemcachedClientService<String> mc = ac.getBean(MemcachedClientService.class);
         AccountUseMemcached accountUseMemcached = ac.getBean(AccountUseMemcached.class);
         Account account = new Account();
         account.setId(1);
