@@ -4,9 +4,9 @@ package dao.sql;
  *
  * @author caoxin
  */
-public class SqlSupport<T> {
+public class SqlSupport<T extends Object> {
 
-    private SqlCachedContainer sqlCachedContainer;
+    private SqlCachedContainer<T> sqlCachedContainer;
 
     public String getSqlInCachedPool(T o, String flag) {
         return sqlCachedContainer.getSql(o, flag);

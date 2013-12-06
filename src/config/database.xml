@@ -83,9 +83,9 @@
         <constructor-arg ref="dataSource" />
     </bean>-->
     
-    <bean id="namedParameterJdbcDaoSupport" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport">
+<!--    <bean id="namedParameterJdbcDaoSupport" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport">
         <property name="dataSource"><ref bean="dataSource"/></property>
-    </bean>
+    </bean>-->
     
     <bean name="sqlCachedContainer" class="dao.sql.SqlCachedContainer"/>
     <bean name="sqlSupport" class="dao.sql.SqlSupport">
@@ -93,8 +93,8 @@
             <ref bean="sqlCachedContainer" />
         </property>
     </bean>
-    <bean id="simpleDao" class="dao.SimpleDao">
-        <property name="sqlSupport"><ref bean="sqlSupport"></property>
-    </bean>
+<!--    <bean id="simpleDao" class="dao.SimpleDao">
+        <property name="sqlSupport"><ref bean="sqlSupport"/></property>
+    </bean>-->
     
 </beans>

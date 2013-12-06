@@ -1,10 +1,6 @@
 package gameserver;
 
-import dao.SimpleDao;
-import event.WorldEvents;
-import event.dispatcher.GameEventDispatcher;
 import jmx.JmxManager;
-import memcached.MemcachedClientService;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 

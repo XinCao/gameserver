@@ -11,6 +11,6 @@ public class SimpleJmx {
 
     public static void main(String... args) {
         ApplicationContext ac = new FileSystemXmlApplicationContext("./config/app.xml");
-        ac.getBean(JmxManager.class).startJmxService();// jms 服务器已经调试成功了
+        ac.getBean(JmxManager.class).startJmxService();// jmx 服务器已经调试成功了
     }
 }

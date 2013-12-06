@@ -9,7 +9,7 @@ import javolution.util.FastMap;
  *
  * @author caoxin
  */
-public class SqlCachedContainer<C> {
+public class SqlCachedContainer<C extends Object> {
 
     private final Map<String, Map<String, String>> cachedSql = new FastMap<String, Map<String, String>>().shared();
 

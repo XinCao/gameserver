@@ -33,4 +33,10 @@
         </property>
     </bean>
     
+    <bean id="" class="memcached.AccountUseMemcached">
+        <property name="useMemcached">
+            <ref bean="useMemcached"/>
+        </property>
+    </bean>
+    
 </beans>

@@ -12,7 +12,12 @@ public class Main {
     public static void main(String ...args) {
         ApplicationContext ac = new FileSystemXmlApplicationContext("./config/app.xml");
         MemcachedClientService<String> mc = ac.getBean(MemcachedClientService.class);
-        UseMemcached useMemcached = ac.getBean(UseMemcached.class);
-        System.out.println(useMemcached);
+        AccountUseMemcached accountUseMemcached = ac.getBean(AccountUseMemcached.class);
+        Account account = new Account();
+        account.setId(1);
+        account.setName("caoxin");
+        account.setShowName("hello world!");
+        accountUseMemcached.putAccount(account);
+        System.out.println(accountUseMemcached.getAccount("caoxin").getShowName());
     }
 }
