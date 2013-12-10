@@ -30,4 +30,5 @@
   <import resource="service.xml"/>
   <import resource="event_listener.xml"/>
   <import resource="memcached.xml"/>
+  <import resource="aop.xml"/>
 </beans>
