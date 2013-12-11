@@ -11,10 +11,11 @@ import java.util.concurrent.locks.ReentrantLock;
 import org.apache.log4j.Logger;
 
 /**
- * Packet Processor responsible for executing packets in correct order with
- * respecting rules: - 1 packet / client at one time. - execute packets in
- * received order.
+ * 多线程处理包的所有逻辑
+ * 
+ * Packet Processor responsible for executing packets in correct order with respecting rules: - 1 packet / client at one time.execute packets in received order.
  *
+ * 
  * @author -Nemesiss-
  * @param <T> AConnection - owner of client packets.
  */

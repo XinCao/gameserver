@@ -255,8 +255,7 @@ public abstract class AConnection {
     abstract protected long getDisconnectionDelay();
 
     /**
-     * This method is called by Dispatcher to inform that this connection was
-     * closed and should be cleared. This method is called only once.
+     * This method is called by Dispatcher to inform that this connection was closed and should be cleared. This method is called only once.
      */
     abstract protected void onDisconnect();
 
