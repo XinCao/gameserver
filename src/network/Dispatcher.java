@@ -28,7 +28,7 @@ public abstract class Dispatcher extends Thread {
      */
     Selector selector;
     /**
-     * ThreadPool on witch disconnection tasks will be executed.
+     * ThreadPool on switch disconnection tasks will be executed.
      */
     private final DisconnectionThreadPool dcPool;
     /**

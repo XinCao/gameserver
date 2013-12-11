@@ -103,7 +103,6 @@ public class PacketProcessor<T extends AConnection> {
         Thread t = new Thread(new PacketProcessorTask(), name);
         threads.add(t);
         t.start();
-
         return true;
     }
 
@@ -146,7 +145,6 @@ public class PacketProcessor<T extends AConnection> {
             while (packets.isEmpty()) {
                 notEmpty.awaitUninterruptibly();
             }
-
             ListIterator<BaseClientPacket<T>> it = packets.listIterator();
             while (it.hasNext()) {
                 BaseClientPacket<T> packet = it.next();
@@ -192,9 +190,8 @@ public class PacketProcessor<T extends AConnection> {
     }
 
     /**
-     * Checking if PacketProcessor is busy or idle and increasing / reducing
-     * numbers of threads.
-     *
+	 *
+     * Checking if PacketProcessor is busy or idle and increasing / reducing numbers of threads.
      * @author -Nemesiss-
      */
     private final class CheckerTask implements Runnable {
@@ -216,8 +213,7 @@ public class PacketProcessor<T extends AConnection> {
             /* Sleep for some time */
             try {
                 Thread.sleep(sleepTime);
-            } catch (InterruptedException e) {
-                // we dont care
+            } catch (InterruptedException e) { // we dont care
             }
 
             /* Number of packets waiting for execution */
@@ -231,10 +227,7 @@ public class PacketProcessor<T extends AConnection> {
             } else if (sizeNow > lastSize && sizeNow > increaseThreshold) {
                 // too low threads
                 if (!newThread() && sizeNow >= increaseThreshold * 3) {
-                    log
-                            .info("Lagg detected! ["
-                            + sizeNow
-                            + " client packets are waiting for execution]. You should consider increasing PacketProcessor maxThreads or hardware upgrade.");
+                    log.info("Lagg detected! [" + sizeNow + " client packets are waiting for execution]. You should consider increasing PacketProcessor maxThreads or hardware upgrade.");
                 }
             }
             lastSize = sizeNow;
