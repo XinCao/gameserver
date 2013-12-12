@@ -10,16 +10,13 @@ import java.util.regex.Pattern;
  */
 public class ValidateString {
 
-    /**
-     * 邮件正则表达式
-     */
-    private static final Pattern mailReg = Pattern.compile("(?:\\w[-.\\w]*\\w@\\w[-._\\w]*\\w\\.\\w{2,3}$)");
+    private static final Pattern mailPattern = Pattern.compile("(?:\\w[-.\\w]*\\w@\\w[-._\\w]*\\w\\.\\w{2,3}$)");
     
-    public static Matcher getMailRegMatcher(String str) {
-        return mailReg.matcher(str);
+    public static Matcher getMailMatcher(String mailStr) {
+        return mailPattern.matcher(mailStr);
     }
     
-    public static boolean isMailReg(String str) {
-        return getMailRegMatcher(str).matches();
+    public static boolean isMailStr(String mailStr) {
+        return getMailMatcher(mailStr).matches();
     }
 }
