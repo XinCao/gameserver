@@ -8,8 +8,11 @@ import java.util.regex.Pattern;
  * 
  * @author caoxin
  */
-public class RegexValidatePattern {
+public class ValidateString {
 
+    /**
+     * 邮件正则表达式
+     */
     private static final Pattern mailReg = Pattern.compile("(?:\\w[-.\\w]*\\w@\\w[-._\\w]*\\w\\.\\w{2,3}$)");
     
     public static Matcher getMailRegMatcher(String str) {
