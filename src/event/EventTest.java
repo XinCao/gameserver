@@ -8,11 +8,12 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
  * 事件分发
  * @author caoxin
  */
-public class SimpleEvent {
+public class EventTest {
 
     public static void main(String... args) {
-        ApplicationContext ac = new FileSystemXmlApplicationContext("./config/app.xml");
+        ApplicationContext ac = new FileSystemXmlApplicationContext("./config/event_listener.xml");
         GameEventDispatcher dispatcher = ac.getBean(GameEventDispatcher.class);
-        dispatcher.triggerEvent(WorldEvents.login);
+        String name = "caoxin";
+        dispatcher.triggerEvent(WorldEvents.login, name);
     }
 }

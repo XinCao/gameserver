@@ -13,14 +13,14 @@ public class WorldEventListener extends AbstractGameEventListener {
     @Override
     public void handleEvent(Event e) throws Exception {
         String eventName = e.getName();
-        Object context = e.getContext();
+        String name = (String)e.getContext();
         if (eventName.equals(WorldEvents.login)) {
-            this.login();
+            this.login(name);
         }
     }
 
-    private void login() {
-        System.out.println("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
+    private void login(String name) {
+        System.out.println(name + "登录游戏世界");
     }
 
 }

@@ -4,7 +4,6 @@
      xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 ">    
-    <!-- 游戏核心bean -->
-    <bean id="actionService" class="action.ActionService"></bean>
+
 
 </beans>

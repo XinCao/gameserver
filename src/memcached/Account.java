@@ -6,7 +6,7 @@ import java.io.Serializable;
  *
  * @author caoxin
  */
-public class Account implements  Serializable {
+public class Account implements Serializable {
 
     private int id;
     private String name;
@@ -52,5 +52,10 @@ public class Account implements  Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "Account{" + "id=" + id + ", name=" + name + ", showName=" + showName + ", birthdy=" + birthdy + ", address=" + address + '}';
     }
 }
