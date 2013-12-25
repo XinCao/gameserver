@@ -5,72 +5,34 @@ import java.nio.ByteBuffer;
 import org.apache.log4j.Logger;
 
 /**
- * Base class for every Client Packet
+ * 网络协议客户端基础包
  *
- * @author -Nemesiss-
- * @param <T> AConnection - owner of this client packet.
+ * @author caoxin
+ * @param <T>
  */
 public abstract class BaseClientPacket<T extends AConnection> extends BasePacket implements Runnable {
 
-    /**
-     * Logger for this class.
-     */
     private static final Logger log = Logger.getLogger(BaseClientPacket.class);
-    /**
-     * Owner of this packet.
-     */
     private T client;
-    /**
-     * ByteBuffer that contains this packet data
-     */
     private ByteBuffer buf;
 
-    /**
-     * Constructs a new client packet with specified id and data buffer.
-     *
-     * @param buf packet data container.
-     * @param opcode packet opcode.
-     */
     public BaseClientPacket(ByteBuffer buf, int opcode) {
         this(opcode);
         this.buf = buf;
     }
 
-    /**
-     * Constructs a new client packet with specified id. ByteBuffer must be
-     * later set with setBuffer method.
-     *
-     * @param opcode packet opcode.
-     */
     public BaseClientPacket(int opcode) {
         super(PacketType.CLIENT, opcode);
     }
 
-    /**
-     * Attach ByteBuffer to this packet.
-     *
-     * @param buf
-     */
     public void setBuffer(ByteBuffer buf) {
         this.buf = buf;
     }
 
-    /**
-     * Attach client connection to this packet.
-     *
-     * @param client
-     */
     public void setConnection(T client) {
         this.client = client;
     }
 
-    /**
-     * This method reads data from a packet buffer. If the error occurred while
-     * reading data, the connection is closed.
-     *
-     * @return <code>true</code> if reading was successful,
-     * otherwise <code>false</code>
-     */
     public final boolean read() {
         log.debug("Before try read");
         try {
@@ -87,23 +49,12 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
         }
     }
 
-    /**
-     * Data reading implementation
-     */
     protected abstract void readImpl();
 
-    /**
-     * @return number of bytes remaining in this packet buffer.
-     */
     public final int getRemainingBytes() {
         return buf.remaining();
     }
 
-    /**
-     * Read int from this packet buffer.
-     *
-     * @return int
-     */
     protected final int readD() {
         try {
             return buf.getInt();
@@ -113,11 +64,6 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
         return 0;
     }
 
-    /**
-     * Read byte from this packet buffer.
-     *
-     * @return int
-     */
     protected final int readC() {
         try {
             return buf.get() & 0xFF;
@@ -127,11 +73,6 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
         return 0;
     }
 
-    /**
-     * Read short from this packet buffer.
-     *
-     * @return int
-     */
     protected final int readH() {
         try {
             return buf.getShort() & 0xFFFF;
@@ -141,11 +82,6 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
         return 0;
     }
 
-    /**
-     * Read double from this packet buffer.
-     *
-     * @return double
-     */
     protected final double readDF() {
         try {
             return buf.getDouble();
@@ -155,11 +91,6 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
         return 0;
     }
 
-    /**
-     * Read double from this packet buffer.
-     *
-     * @return double
-     */
     protected final float readF() {
         try {
             return buf.getFloat();
@@ -169,11 +100,6 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
         return 0;
     }
 
-    /**
-     * Read long from this packet buffer.
-     *
-     * @return long
-     */
     protected final long readQ() {
         try {
             return buf.getLong();
@@ -183,13 +109,8 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
         return 0;
     }
 
-    /**
-     * Read String from this packet buffer.
-     *
-     * @return String
-     */
     protected final String readS() {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         char ch;
         try {
             while ((ch = buf.getChar()) != 0) {
@@ -201,12 +122,6 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
         return sb.toString();
     }
 
-    /**
-     * Read n bytes from this packet buffer, n = length.
-     *
-     * @param length
-     * @return byte[]
-     */
     protected final byte[] readB(int length) {
         byte[] result = new byte[length];
         try {
@@ -217,15 +132,9 @@ public abstract class BaseClientPacket<T extends AConnection> extends BasePacket
         return result;
     }
 
-    /**
-     * Execute this packet action.
-     */
-    protected abstract void runImpl();
-
-    /**
-     * @return Connection that is owner of this packet.
-     */
     public final T getConnection() {
         return client;
     }
+
+    abstract protected void canPerform();
 }

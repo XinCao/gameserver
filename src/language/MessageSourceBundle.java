@@ -23,4 +23,9 @@ public class MessageSourceBundle {
     public void setMessageSource(MessageSource messageSource) {
         this.messageSource = messageSource;
     }
+
+    @Override
+    public String toString() {
+        return "MessageSourceBundle{" + "messageSource=" + messageSource + '}';
+    }
 }

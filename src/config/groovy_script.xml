@@ -6,6 +6,7 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
           http://www.springframework.org/schema/lang http://www.springframework.org/schema/lang/spring-lang-3.2.xsd
 ">
+    <!--用于战斗脚本和需要经常修改的文件-->
     <lang:groovy id="fighting"  script-source="classpath:script/FightingScript.groovy"  refresh-check-delay="10000">
         <!--<lang:property name="" value=""/>-->
     </lang:groovy>

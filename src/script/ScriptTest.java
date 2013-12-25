@@ -10,7 +10,7 @@ import org.springframework.context.support.FileSystemXmlApplicationContext;
 public class ScriptTest {
     public static void main(String...args) {
         ApplicationContext ac = new FileSystemXmlApplicationContext("./config/groovy_script.xml");
-        Fighting fighting = (Fighting)ac.getBean(Fighting.class);
+        Fighting fighting = (Fighting)ac.getBean("fighting");
         fighting.test();
     }
 }

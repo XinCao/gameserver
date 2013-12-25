@@ -14,7 +14,7 @@
             </constructor-arg>
         </bean>
     </util:list>
-    
+   
     <bean id="memcachedClient" class="net.spy.memcached.MemcachedClient">
         <constructor-arg>
             <ref bean="inetSocketAddressList"/>

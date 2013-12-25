@@ -4,6 +4,20 @@
        xsi:schemaLocation="
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 ">
+    <!--读取配置文件-->  
+    <bean id="systemConfigProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>file:config/defaults.conf</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true" />
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties" ref="systemConfigProperties" />
+    </bean>
+
     <!-- MBeanExporter -->
     <bean id="exporter" class="org.springframework.jmx.export.MBeanExporter" depends-on="mbeanServer">
         <property name="beans">
@@ -34,8 +48,8 @@
             <value>${jmx.port}</value>
         </property>
     </bean>
-    
-    <bean id="jmxManager" class="jmx.JmxManager">
+
+    <bean id="jmxManager" class="jmx.JmxManager" init-method="startJmxService" destroy-method="stopJmxService" >
         <property name="httpAdaptor" ref="httpAdaptor" />
     </bean>
     <!--自己定义-->
