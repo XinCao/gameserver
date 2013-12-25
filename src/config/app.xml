@@ -25,7 +25,6 @@
   </bean>
   
   <!--导入数据库配置-->
-  <import resource="database.xml"/>
   <import resource="jmx.xml"/>
   <import resource="service.xml"/>
   <import resource="event_listener.xml"/>

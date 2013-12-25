@@ -1,7 +1,8 @@
 package aop;
 
 /**
- *
+ * 切面
+ * 
  * @author caoxin
  */
 public class Logger {

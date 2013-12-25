@@ -1,9 +1,23 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="
-        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 ">
+    <!--读取配置文件-->  
+    <bean id="systemConfigProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+        <property name="locations">
+            <list>
+                <value>file:config/defaults.conf</value>
+            </list>
+        </property>
+        <property name="ignoreResourceNotFound" value="true" />
+    </bean>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="properties" ref="systemConfigProperties" />
+    </bean>
+  
     <bean id="driverManagerDataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
         <property name="driverClassName">
             <value>${database.driver}</value>
@@ -18,7 +32,6 @@
             <value>${database.pass}</value>
         </property>
     </bean>
-    
     <bean id="connectionFactory" class="org.apache.commons.dbcp.DataSourceConnectionFactory">
         <constructor-arg>
             <ref bean="driverManagerDataSource"/>
@@ -69,32 +82,21 @@
             <ref bean="connectionPool"/>
         </constructor-arg>
     </bean>
-    
-<!--    <bean id="sqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource">
-            <ref local="dataSource"/>
+            <ref bean="dataSource"/>
         </property>
         <property name="configLocation">
-            <value>sql_map_config.xml</value>
-        </property>
-    </bean>-->
-    
-<!--    <bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-        <constructor-arg ref="dataSource" />
-    </bean>-->
-    
-<!--    <bean id="namedParameterJdbcDaoSupport" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcDaoSupport">
-        <property name="dataSource"><ref bean="dataSource"/></property>
-    </bean>-->
-    
-    <bean name="sqlCachedContainer" class="dao.sql.SqlCachedContainer"/>
-    <bean name="sqlSupport" class="dao.sql.SqlSupport">
-        <property name="sqlCachedContainer">
-            <ref bean="sqlCachedContainer" />
+            <value>config/mybatis/mybatis-config.xml</value>
         </property>
     </bean>
-<!--    <bean id="simpleDao" class="dao.SimpleDao">
-        <property name="sqlSupport"><ref bean="sqlSupport"/></property>
-    </bean>-->
-    
+    <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+        <property name="mapperInterface">
+            <value>dao.UserMapper</value>
+        </property>
+        <property name="sqlSessionFactory">
+            <ref bean="sqlSessionFactory"/>
+        </property>
+    </bean>
+
 </beans>

@@ -13,6 +13,7 @@
             <config-files>
                 <config-file>src/config/message_source_bundle.xml</config-file>
                 <config-file>src/config/action.xml</config-file>
+                <config-file>src/config/ibatis.xml</config-file>
             </config-files>
             <config-file-groups/>
         </spring-data>
