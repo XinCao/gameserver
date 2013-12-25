@@ -13,10 +13,12 @@ import java.util.Map;
 public class Random {
 
     public static int randomInt(int max) {
+        Args.notNegative(max, "max < 0");
         return (int) (Math.random() * max);
     }
 
     public static int randomInt(int min, int max) {
+        Args.notNegative("min, max", min, max, max - min);
         return (int) (Math.random() * (max - min) + min);
     }
 
@@ -72,12 +74,12 @@ public class Random {
         return weightMap.get(key);
     }
 
-    public static void main(String[] args) {
+    public static void main(String... args) {
         Map<Integer, Object> weightMap = new HashMap<Integer, Object>();
         int total = 0;
         int loop = 100;
         Map<Integer, Integer> result = new HashMap<Integer, Integer>();
-        while(loop > 0) {
+        while (loop > 0) {
             for (int i = 0; i < 10; i++) {
                 weightMap.put(i * 10 * i * 10, new Integer(i));
                 total += i * 10 * i * 10;
