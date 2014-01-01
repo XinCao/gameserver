@@ -22,6 +22,9 @@
     <util:list id="inetSocketAddressList">
         <bean  class="java.net.InetSocketAddress">
             <constructor-arg>
+                <value>${memcached.ip}</value>
+            </constructor-arg>
+            <constructor-arg>
                 <value>${memcached.port}</value>
             </constructor-arg>
         </bean>
