@@ -8,82 +8,21 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import network.options.Assertion;
 
-/**
- * Class that represent Connection with server socket. Connection is created by
- * <code>ConnectionFactory</code> and attached to
- * <code>SelectionKey</code> key. Selection key is registered to one of
- * Dispatchers
- * <code>Selector</code> to handle io read and write.
- *
- * @author -Nemesiss-
- */
 public abstract class AConnection {
 
-    /**
-     * SocketChannel representing this connection
-     */
-    private boolean isNeedProcessTencentHead = false;
     private final SocketChannel socketChannel;
-    /**
-     * Dispatcher [AcceptReadWriteDispatcherImpl] to witch this connection
-     * SelectionKey is registered.
-     */
     private final Dispatcher dispatcher;
-    /**
-     * SelectionKey representing this connection.
-     */
-    private SelectionKey key;
-    /**
-     * True if this connection should be closed after sending last server
-     * packet.
-     */
-    protected boolean pendingClose;
-    /**
-     * True if OnDisconnect() method should be called immediately after this
-     * connection was closed.
-     */
-    protected boolean isForcedClosing;
-    /**
-     * True if this connection is already closed.
-     */
-    protected boolean closed;
-    /**
-     * Object on witch some methods are synchronized
-     */
-    protected final Object guard = new Object();
-    /**
-     * ByteBuffer for io write.
-     */
     public final ByteBuffer writeBuffer;
-    /**
-     * ByteBuffer for io read.
-     */
     public final ByteBuffer readBuffer;
-    /**
-     * Caching ip address to make sure that {@link #getIP()} method works even
-     * after disconnection
-     */
     private final String ip;
-    /**
-     * Used only for PacketProcessor synchronization purpose
-     */
-    private boolean locked = false;
+    
+    private SelectionKey key;
+    protected boolean pendingClose;
+    protected boolean isForcedClosing;
+    protected boolean closed;
+    protected final Object guard = new Object();
+    private boolean locked = false; //  Used only for PacketProcessor synchronization purpose
 
-    public boolean getIsNeedProcessTencentHead() {
-        return isNeedProcessTencentHead && CommonConfig.isTencentPlatform;
-    }
-
-    protected void setIsNeedProcessTencentHead(boolean isNeedProcessTencentHead) {
-        this.isNeedProcessTencentHead = isNeedProcessTencentHead;
-    }
-
-    /**
-     * Constructor
-     *
-     * @param sc
-     * @param d
-     * @throws IOException
-     */
     public AConnection(SocketChannel sc, Dispatcher d) throws IOException {
         socketChannel = sc;
         dispatcher = d;
@@ -92,22 +31,12 @@ public abstract class AConnection {
         writeBuffer.order(ByteOrder.LITTLE_ENDIAN);
         readBuffer = ByteBuffer.allocate(8192 * 2);
         readBuffer.order(ByteOrder.LITTLE_ENDIAN);
-
         dispatcher.register(socketChannel, SelectionKey.OP_READ, this);
-
         InetAddress address = socketChannel.socket().getInetAddress();
-        //腾讯平台上有大量的短连接，在代码运行到这里之前连接已经断开，导致这里得到的address为空
-        //最后抛出NullPointerException
         this.ip = null != address ? address.getHostAddress() : null;
 
     }
 
-    /**
-     * Set selection key - result of registration this AConnection socketChannel
-     * to one of dispatchers.
-     *
-     * @param key
-     */
     final void setKey(SelectionKey key) {
         this.key = key;
     }
@@ -123,22 +52,7 @@ public abstract class AConnection {
     }
 
     /**
-     * @return Dispatcher to witch this connection is registered.
-     */
-    final Dispatcher getDispatcher() {
-        return dispatcher;
-    }
-
-    /**
-     * @return SocketChannel representing this connection.
-     */
-    public SocketChannel getSocketChannel() {
-        return socketChannel;
-    }
-
-    /**
-     * Connection will be closed at some time [by Dispatcher Thread], after that
-     * onDisconnect() method will be called to clear all other things.
+     * Connection will be closed at some time [by Dispatcher Thread], after that onDisconnect() method will be called to clear all other things.
      *
      * @param forced is just hint that getDisconnectionDelay() should return 0
      * so OnDisconnect() method will be called without any delay.
@@ -148,16 +62,13 @@ public abstract class AConnection {
             if (isWriteDisabled()) {
                 return;
             }
-
             isForcedClosing = forced;
             getDispatcher().closeConnection(this);
         }
     }
 
     /**
-     * This will only close the connection without taking care of the rest. May
-     * be called only by Dispatcher Thread. Returns true if connection was not
-     * closed before.
+     * This will only close the connection without taking care of the rest. May be called only by Dispatcher Thread. Returns true if connection was not closed before.
      *
      * @return true if connection was not closed before.
      */
@@ -169,7 +80,6 @@ public abstract class AConnection {
         if (Assertion.NetworkAssertion) {
             assert Thread.currentThread() == dispatcher;
         }
-
         synchronized (guard) {
             if (closed) {
                 return false;
@@ -227,6 +137,20 @@ public abstract class AConnection {
      */
     void unlockConnection() {
         locked = false;
+    }
+    
+    /**
+     * @return Dispatcher to witch this connection is registered.
+     */
+    final Dispatcher getDispatcher() {
+        return dispatcher;
+    }
+
+    /**
+     * @return SocketChannel representing this connection.
+     */
+    public SocketChannel getSocketChannel() {
+        return socketChannel;
     }
 
     /**

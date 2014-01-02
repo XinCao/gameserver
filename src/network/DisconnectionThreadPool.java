@@ -6,16 +6,16 @@ package network;
  * @author -Nemesiss-
  */
 public interface DisconnectionThreadPool {
+
     /**
-     * Schedule Disconnection task.
-     *
-     * @param dt    <code>DisconnectionTask</code>
-     * @param delay
+     * 若干时间后关闭连接任务
+     * @param dt
+     * @param delay 
      */
     public void scheduleDisconnection(DisconnectionTask dt, long delay);
 
     /**
-     * Waits till all task end work.
+     * 关闭所有连接（shutdown）
      */
     public void waitForDisconnectionTasks();
 }
