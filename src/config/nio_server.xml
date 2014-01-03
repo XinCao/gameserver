@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+" xmlns:util="http://www.springframework.org/schema/util">
+    <bean id="connectionFactory" class="network.ConnectionFactoryImp"/>
+    <bean id="disconnectionThreadPool" class="network.DisconnectionThreadPoolImp"/>
+    <bean id="cfg" class="network.ServerCfg">
+        <constructor-arg name="hostName">
+            <value>127.0.0.1</value>
+        </constructor-arg>
+        <constructor-arg name="port">
+            <value>8000</value>
+        </constructor-arg>
+        <constructor-arg name="connectionName">
+            <value>gameserver acceptor thread!</value>
+        </constructor-arg>
+        <constructor-arg name="factory">
+            <ref bean="connectionFactory"/>
+        </constructor-arg>
+    </bean>
+    <bean id="nioServer" class="network.NioServer">
+        <constructor-arg name="readWriteThreads">
+            <value>5</value>
+        </constructor-arg>
+        <constructor-arg name="dcPool">
+            <ref bean="disconnectionThreadPool"/>
+        </constructor-arg>
+        <constructor-arg name="cfgs">
+            <list>
+                <ref bean="cfg"/>
+            </list>
+        </constructor-arg>
+    </bean>
+</beans>
