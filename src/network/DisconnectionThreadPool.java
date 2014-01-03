@@ -1,5 +1,7 @@
 package network;
 
+import java.util.List;
+
 /**
  * DisconnectionThreadPool that will be used to execute DisconnectionTask
  *
@@ -17,5 +19,5 @@ public interface DisconnectionThreadPool {
     /**
      * 关闭所有连接（shutdown）
      */
-    public void waitForDisconnectionTasks();
+    public void waitForDisconnectionTasks(List<AConnection> list);
 }

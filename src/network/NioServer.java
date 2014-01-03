@@ -128,7 +128,8 @@ public class NioServer {
         logger.info("Forced Disconnecting all connections...");
         closeAll();
         logger.info(" Active connections: " + getActiveConnections());
-        dcPool.waitForDisconnectionTasks();
+        List<AConnection> connectionList = getAConnectionList();
+        dcPool.waitForDisconnectionTasks(connectionList);
         try {
             Thread.sleep(1000);
         } catch (Throwable t) {
@@ -192,7 +193,27 @@ public class NioServer {
         }
         return count;
     }
-
+    
+    private List<AConnection> getAConnectionList() {
+        List<AConnection> connectionList = new ArrayList<AConnection>();
+        if (readWriteDispatchers != null) {
+            for (Dispatcher d : readWriteDispatchers) {
+                for (SelectionKey key : d.getSelector().keys()) {
+                    if (key.attachment() instanceof AConnection) {
+                        connectionList.add((AConnection) key.attachment());
+                    }
+                }
+            }
+        } else {
+            for (SelectionKey key : acceptDispatcher.getSelector().keys()) {
+                if (key.attachment() instanceof AConnection) {
+                    connectionList.add((AConnection) key.attachment());
+                }
+            }
+        }
+        return connectionList;
+    }
+    
     public final Dispatcher getAcceptDispatcher() {
         return acceptDispatcher;
     }
