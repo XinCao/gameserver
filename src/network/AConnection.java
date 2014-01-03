@@ -15,7 +15,7 @@ public abstract class AConnection {
     public final ByteBuffer writeBuffer;
     public final ByteBuffer readBuffer;
     private final String ip;
-    
+
     private SelectionKey key;
     protected boolean pendingClose;
     protected boolean isForcedClosing;
