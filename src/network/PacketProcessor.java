@@ -1,6 +1,5 @@
 package network;
 
-import network.packet.BaseClientPacket;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.ListIterator;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import network.packet.BaseClientPacket;
 import org.apache.log4j.Logger;
 
 /**
@@ -191,7 +191,7 @@ public class PacketProcessor<T extends AConnection> {
     }
 
     /**
-	 *
+     *
      * Checking if PacketProcessor is busy or idle and increasing / reducing numbers of threads.
      * @author -Nemesiss-
      */

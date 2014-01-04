@@ -56,10 +56,4 @@ public abstract class BaseServerPacket extends BasePacket {
     protected final void writeB(ByteBuffer buf, byte[] data) {
         buf.put(data);
     }
-
-    abstract protected void readImplement();
-
-    abstract protected void canPerform();
-
-    abstract protected void runOption();
 }

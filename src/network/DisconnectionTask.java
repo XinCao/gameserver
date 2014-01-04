@@ -1,33 +1,36 @@
 package network;
 
-/**
- * Disconnection Task that will be execute on <code>DisconnectionThreadPool</code>
- *
- * @author -Nemesiss-
- * @see com.aionemu.commons.network.DisconnectionThreadPool
- */
 public class DisconnectionTask implements Runnable {
-    /**
-     * Connection that onDisconnect() method will be executed by <code>DisconnectionThreadPool</code>
-     *
-     * @see com.aionemu.commons.network.DisconnectionThreadPool
-     */
-    private AConnection connection;
 
-    /**
-     * Construct <code>DisconnectionTask</code>
-     *
-     * @param connection
-     */
+    private AConnection connection;
+    private long delay = -1;
+    private boolean locked = false;
+
     public DisconnectionTask(AConnection connection) {
         this.connection = connection;
     }
 
-    /**
-     * @see java.lang.Runnable#run()
-     */
     @Override
     public void run() {
         connection.onDisconnect();
+    }
+
+    boolean tryLockConnection() {
+        if (locked) {
+            return false;
+        }
+        return locked = true;
+    }
+
+    void unlockConnection() {
+        locked = false;
+    }
+
+    public long getDelay() {
+        return delay + System.currentTimeMillis();
+    }
+
+    public void setDelay(long delay) {
+        this.delay = delay;
     }
 }

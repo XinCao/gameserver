@@ -9,97 +9,49 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.nio.channels.spi.SelectorProvider;
 import network.options.Assertion;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-
-/**
- * Dispatcher that dispatch SelectionKeys set selected by Selector.
- *
- * @author -Nemesiss-
- */
 public abstract class Dispatcher extends Thread {
 
-    /**
-     * Logger for Dispatcher
-     */
-    private static final Logger log = Logger.getLogger(Dispatcher.class);
-    /**
-     * Selector thats selecting ready keys.
-     */
-    Selector selector;
-    /**
-     * ThreadPool on switch disconnection tasks will be executed.
-     */
+    private static final Logger logger = LoggerFactory.getLogger(Dispatcher.class);
     private final DisconnectionThreadPool dcPool;
-    /**
-     * Object on witch register vs selector.select are synchronized
-     */
+    protected Selector selector;
     private final Object gate = new Object();
 
-    /**
-     * Constructor.
-     *
-     * @param name
-     * @param dcPool
-     * @throws IOException
-     */
     public Dispatcher(String name, DisconnectionThreadPool dcPool) throws IOException {
         super(name);
-        this.selector = SelectorProvider.provider().openSelector();
         this.dcPool = dcPool;
+        this.selector = SelectorProvider.provider().openSelector();
     }
 
-    /**
-     * Add connection to pendingClose list, so this connection will be closed by
-     * this
-     * <code>Dispatcher</code> as soon as possible.
-     *
-     * @param con
-     * @see
-     * com.aionemu.commons.network.Dispatcher#closeConnection(com.aionemu.commons.network.AConnection)
-     */
     abstract void closeConnection(AConnection con);
 
-    /**
-     * Dispatch Selected keys and process pending close.
-     *
-     * @throws IOException
-     */
     abstract void dispatch() throws IOException;
 
     /**
-     * @return Selector of this Dispatcher
-     */
-    public final Selector selector() {
-        return this.selector;
-    }
-
-    /**
      * Dispatching Selected keys and processing pending close.
-     *
-     * @see java.lang.Thread#run()
      */
     @Override
     public void run() {
-        for (;;) {
+        while(true) {
             try {
                 dispatch();
                 synchronized (gate) {
                 }
             } catch (Exception e) {
-                log.error("Dispatcher error! " + e, e);
+                logger.error("Dispatcher error! " + e, e);
             }
         }
     }
 
     /**
-     * Register new client connected to this Dispatcher and set SelectionKey
-     * (result of registration) as this key of given AConnection.
-     *
+     * 注册一个连接
+     * 
      * @param ch
      * @param ops
      * @param att
-     * @throws IOException
+     * @throws IOException 
      */
     public final void register(SelectableChannel ch, int ops, AConnection att) throws IOException {
         synchronized (gate) {
@@ -109,14 +61,13 @@ public abstract class Dispatcher extends Thread {
     }
 
     /**
-     * Register new Acceptor this Dispatcher and return SelectionKey (result of
-     * registration).
-     *
+     * 注册ServerChannel
+     * 
      * @param ch
      * @param ops
      * @param att
-     * @return SelectionKey representing this registration.
-     * @throws IOException
+     * @return
+     * @throws IOException 
      */
     public final SelectionKey register(SelectableChannel ch, int ops, Acceptor att) throws IOException {
         synchronized (gate) {
@@ -126,127 +77,61 @@ public abstract class Dispatcher extends Thread {
     }
 
     /**
-     * Accept new connection.
-     *
-     * @param key
+     * 创建一个客户端连接
+     * 
+     * @param key 
      */
     final void accept(SelectionKey key) {
         try {
             ((Acceptor) key.attachment()).accept(key);
         } catch (Exception e) {
-            log.error("Error while accepting connection: +" + e, e);
+            logger.error("Error while accepting connection: +" + e, e);
         }
     }
 
-    /**
-     * Read data from socketChannel represented by SelectionKey key. Parse and
-     * Process data. Prepare buffer for next read.
-     *
-     * @param key
-     */
+
     final void read(SelectionKey key) {
         SocketChannel socketChannel = (SocketChannel) key.channel();
         AConnection con = (AConnection) key.attachment();
-        final boolean isNeedProcessTencentData = con.getIsNeedProcessTencentHead();
         ByteBuffer rb = con.readBuffer;
-
-        /**
-         * Test if this build should use assertion. If NetworkAssertion == false
-         * javac will remove this code block
-         */
         if (Assertion.NetworkAssertion) {
             assert con.readBuffer.hasRemaining();
         }
-
-        /**
-         * Attempt to read off the channel
-         */
         int numRead;
         try {
-            //log.info("try to read data from " + key.toString());
             numRead = socketChannel.read(rb);
-            //log.info("read " + numRead +" bytes data from " + key.toString());
         } catch (IOException e) {
             closeConnectionImpl(con);
-            log.info("error happend during read data from " + key.toString());
+            logger.info("error happend during read data from " + key.toString());
             return;
         }
-
         if (numRead == -1) {
-            /**
-             * Remote entity shut the socket down cleanly. Do the same from our
-             * end and cancel the channel.
-             */
             closeConnectionImpl(con);
             return;
         } else if (numRead == 0) {
             rb.clear();
             return;
         }
-
         rb.flip();
-
         // 因为协议前两个字段是长度
         // 所以收到一个完整的协议应该是
         // 协议长度 > 2 (可以读出长度) 且 后面的还有大于等于该长度的数据
         for (;;) {
             int remaining = rb.remaining();
-            //log.info("try to process data and remainning data is " + remaining);
             if (remaining <= 2) {
                 break;
             }
             short needlen = rb.getShort(rb.position());
-            if (isNeedProcessTencentData) {
-                short temp = (short) ((needlen >> 8) & 0xff);
-                needlen = (short) ((needlen << 8) & 0xff00);
-                needlen |= temp;
-            }
             if (remaining < needlen) {
                 break;
             }
-
-            if (isNeedProcessTencentData) {
-                //如果是腾讯平台，跳过相关数据
-                final int lentoskip = 4 + 2 + 2 + 2;
-                //byte[] data = rb.array();
-                //String str = "";
-                //for(int i = 0; i < 20; ++i)
-                //{
-                //str += String.format("%x ", data[i]);
-                //}
-                //log.info(rb.position() + " packet data :" + str);
-                rb.position(rb.position() + lentoskip);
-                //int ip   = rb.getInt();
-                //int port = rb.getShort();
-                //int appDataLen = rb.getShort();
-                //int ex = rb.getShort();
-                //log.info("ip = " + ip + ", port = " + port + ", appDataLen = " + appDataLen + " ex "+ex);
-            }
-            /**
-             * got full message
-             */
             if (!parse(con, rb)) {
                 closeConnectionImpl(con);
                 return;
             }
         }
-        //while (rb.remaining() > 2 && rb.remaining() >= rb.getShort(rb.position()))
-        //{
-        /**
-         * got full message
-         */
-        // if (!parse(con, rb)) {
-        //     closeConnectionImpl(con);
-        //     return;
-        // }
-        //}
         if (rb.hasRemaining()) {
             con.readBuffer.compact();
-
-            /**
-             * Test if this build should use assertion. If NetworkAssertion ==
-             * false javac will remove this code block
-             */
             if (Assertion.NetworkAssertion) {
                 assert con.readBuffer.hasRemaining();
             }
@@ -255,74 +140,43 @@ public abstract class Dispatcher extends Thread {
         }
     }
 
-    /**
-     * Parse data from buffer and prepare buffer for reading just one packet -
-     * call processData(ByteBuffer b).
-     *
-     * @param con Connection
-     * @param buf Buffer with packet data
-     * @return True if packet was parsed.
-     */
+
     private boolean parse(AConnection con, ByteBuffer buf) {
         short sz = 0;
         try {
-            //int position = buf.position();
             sz = buf.getShort();
             if (sz > 1) {
                 sz -= 2;
             }
-            //log.info("in parse position is " + position + " and sz is " + sz + "and buff remaining is " + buf.remaining());
             ByteBuffer b = (ByteBuffer) buf.slice().limit(sz);
             b.order(ByteOrder.LITTLE_ENDIAN);
-            /**
-             * read message fully
-             */
             buf.position(buf.position() + sz);
-
             return con.processData(b);
         } catch (IllegalArgumentException e) {
-            log.warn("Error on parsing input from client - account: " + con + " packet size: " + sz + " real size:"
-                    + buf.remaining(), e);
+            logger.warn("Error on parsing input from client - account: " + con + " packet size: " + sz + " real size:" + buf.remaining(), e);
             return false;
         }
     }
 
-    /**
-     * Write as much as possible data to socketChannel represented by
-     * SelectionKey key. If all data were written key write interest will be
-     * disabled.
-     *
-     * @param key
-     */
     final void write(SelectionKey key) {
         SocketChannel socketChannel = (SocketChannel) key.channel();
         AConnection con = (AConnection) key.attachment();
-
         int numWrite;
         ByteBuffer wb = con.writeBuffer;
-        /**
-         * We have not writted data
-         */
         if (wb.hasRemaining()) {
             try {
                 numWrite = socketChannel.write(wb);
             } catch (IOException e) {
-                System.out.println("writeFailed0 " + e.getMessage());
+                System.out.println("writeFailed " + e.getMessage());
                 closeConnectionImpl(con);
                 return;
             }
-
             if (numWrite == 0) {
                 System.out.println("Write " + numWrite + " ip: " + con.getIP());
-                log.info("Write " + numWrite + " ip: " + con.getIP());
+                logger.info("Write " + numWrite + " ip: " + con.getIP());
                 return;
             }
-
-            System.out.println("write0 " + numWrite);
-
-            /**
-             * Again not all data was send
-             */
+            System.out.println("write " + numWrite);
             if (wb.hasRemaining()) {
                 return;
             }
@@ -331,16 +185,11 @@ public abstract class Dispatcher extends Thread {
         while (true) {
             wb.clear();
             boolean writeFailed = !con.writeData(wb);
-
             if (writeFailed) {
                 wb.limit(0);
-                System.out.println("writeFailed1 " + wb.limit());
+                System.out.println("writeFailed " + wb.limit());
                 break;
             }
-
-            /**
-             * Attempt to write to the channel
-             */
             try {
                 numWrite = socketChannel.write(wb);
             } catch (IOException e) {
@@ -348,65 +197,36 @@ public abstract class Dispatcher extends Thread {
                 System.out.println("writeFailed2 " + wb.limit() + ", " + e.getMessage());
                 return;
             }
-
             if (numWrite == 0) {
-                log.info("Write " + numWrite + " ip: " + con.getIP());
+                logger.info("Write " + numWrite + " ip: " + con.getIP());
                 System.out.println("Write " + numWrite + " ip: " + con.getIP());
                 return;
             }
-
             System.out.println("write1 " + numWrite);
-
-            /**
-             * not all data was send
-             */
             if (wb.hasRemaining()) {
                 System.out.println("writeFailed3 " + wb.remaining());
                 return;
             }
         }
-
-        /**
-         * Test if this build should use assertion. If NetworkAssertion == false
-         * javac will remove this code block
-         */
         if (Assertion.NetworkAssertion) {
             assert !wb.hasRemaining();
         }
-
-        /**
-         * We wrote away all data, so we're no longer interested in writing on
-         * this socket.
-         */
         key.interestOps(key.interestOps() & ~SelectionKey.OP_WRITE);
-
-        /**
-         * We wrote all data so we can close connection that is "PandingClose"
-         */
         if (con.isPendingClose()) {
             closeConnectionImpl(con);
         }
     }
 
-    /**
-     * Connection will be closed [onlyClose()] and onDisconnect() method will be
-     * executed on another thread [DisconnectionThreadPool] after
-     * getDisconnectionDelay() time in ms. This method may only be called by
-     * current Dispatcher Thread.
-     *
-     * @param con
-     */
     protected final void closeConnectionImpl(AConnection con) {
-        /**
-         * Test if this build should use assertion. If NetworkAssertion == false
-         * javac will remove this code block
-         */
         if (Assertion.NetworkAssertion) {
             assert Thread.currentThread() == this;
         }
-
         if (con.onlyClose()) {
             dcPool.scheduleDisconnection(new DisconnectionTask(con), con.getDisconnectionDelay());
         }
+    }
+    
+    public final Selector getSelector() {
+        return this.selector;
     }
 }
