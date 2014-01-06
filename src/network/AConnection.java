@@ -20,6 +20,7 @@ public abstract class AConnection {
     protected boolean pendingClose;
     protected boolean isForcedClosing;
     protected boolean closed;
+    private long connectionDelay;
     protected final Object guard = new Object();
     private boolean locked = false; //  Used only for PacketProcessor synchronization purpose
 
@@ -153,6 +154,14 @@ public abstract class AConnection {
         return socketChannel;
     }
 
+    public long getDisconnectionDelay() {
+        return this.connectionDelay;
+    }
+    
+    public void setDisconnectionDelay(long connectionDelay) {
+        this.connectionDelay = connectionDelay;
+    }
+    
     /**
      * @param data
      * @return True if data was processed correctly, False if some error
@@ -169,14 +178,6 @@ public abstract class AConnection {
      * are not any more data to write.
      */
     abstract protected boolean writeData(ByteBuffer data);
-
-    /**
-     * This method is called by Dispatcher when connection is ready to be
-     * closed.
-     *
-     * @return time in ms after witch onDisconnect() method will be called.
-     */
-    abstract protected long getDisconnectionDelay();
 
     /**
      * This method is called by Dispatcher to inform that this connection was closed and should be cleared. This method is called only once.

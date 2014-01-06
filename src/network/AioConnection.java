@@ -10,6 +10,8 @@ import java.nio.channels.SocketChannel;
  */
 public class AioConnection extends AConnection {
 
+    
+    
     public AioConnection(SocketChannel sc, Dispatcher d) throws IOException {
         super(sc, d);
     }
@@ -24,18 +26,17 @@ public class AioConnection extends AConnection {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    @Override
-    protected long getDisconnectionDelay() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    /**
+     * 玩家离线时，调用
+     */
     @Override
     protected void onDisconnect() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
+    /**
+     * 停服时，调用
+     */
     @Override
     protected void onServerClose() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }
