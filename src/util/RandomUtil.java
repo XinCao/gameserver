@@ -73,8 +73,10 @@ public class RandomUtil {
             }
         }
         if (sum != total) {
-            logger.info("you muse ensure total = {} is sum of all weight");
+            logger.info("you must ensure total = {} is sum of all weight");
+            return null;
         }
+
         return  result;
     }
 

@@ -24,10 +24,11 @@ public class GroovyHandler {
     File file;
 
     public GroovyHandler(String fileName, String groovyPath) {
-        this.initMethod(fileName, groovyPath);
+        this.groovyPath = groovyPath;
+        this.initMethod(fileName);
     }
 
-    private boolean initMethod(String fileName, String groovyPath) {
+    private boolean initMethod(String fileName) {
         cl = GroovyHandler.class.getClassLoader();
         gcl = new GroovyClassLoader(cl);
         gs = new GroovyShell(cl);

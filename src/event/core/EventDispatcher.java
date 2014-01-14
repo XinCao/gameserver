@@ -45,13 +45,11 @@ public class EventDispatcher {
         return instances.containsKey(name);
     }
 
-    public void addListener(String eventName, EventListener listener)
-            throws Exception {
+    public void addListener(String eventName, EventListener listener) throws Exception {
         addListener(eventName, listener, false);
     }
 
-    public void addListener(String eventName, EventListener listener, boolean autoRemove)
-            throws Exception {
+    public void addListener(String eventName, EventListener listener, boolean autoRemove) throws Exception {
         if (!listeners.containsKey(eventName)) {
             listeners.put(eventName, new EventListenerCollection());
         }
@@ -93,20 +91,17 @@ public class EventDispatcher {
         }
     }
 
-    public void addGlobalListener(EventListener listener)
-            throws Exception {
+    public void addGlobalListener(EventListener listener) throws Exception {
         addGlobalListener(listener, false);
     }
 
-    public void addGlobalListener(EventListener listener, boolean autoRemove)
-            throws Exception {
+    public void addGlobalListener(EventListener listener, boolean autoRemove) throws Exception {
         globalListeners.addListener(listener, autoRemove);
         ArrayList events = queue.getQueuedEvents();
         Event e;
         for (Iterator iter = events.iterator(); iter.hasNext(); propagate(e, false)) {
             e = (Event) iter.next();
         }
-
     }
 
     public EventListener removeGlobalEventListener(EventListener listener) {
