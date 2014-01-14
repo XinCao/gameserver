@@ -11,6 +11,6 @@ public class ConnectionFactoryImp implements ConnectionFactory {
 
     @Override
     public AConnection create(SocketChannel socket, Dispatcher dispatcher) throws IOException {
-        return new AioConnection(socket, dispatcher);
+        return new AionConnection(socket, dispatcher);
     }
 }

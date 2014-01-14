@@ -8,17 +8,23 @@ import java.nio.channels.SocketChannel;
  *
  * @author caoxin
  */
-public class AioConnection extends AConnection {
+public class AionConnection extends AConnection {
 
     
     
-    public AioConnection(SocketChannel sc, Dispatcher d) throws IOException {
+    public AionConnection(SocketChannel sc, Dispatcher d) throws IOException {
         super(sc, d);
     }
     
     @Override
     protected boolean processData(ByteBuffer data) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int packetId = data.getShort();
+        
+        
+        
+        
+        
+        return true;
     }
 
     @Override

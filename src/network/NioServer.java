@@ -118,7 +118,7 @@ public class NioServer {
         } catch (Exception e) {
             logger.error("Error during closing ServerChannel, " + e, e);
         }
-        notifyServerClose();
+        this.notifyServerClose();
         try {
             Thread.sleep(1000);
         } catch (Throwable t) {
@@ -126,7 +126,7 @@ public class NioServer {
         }
         logger.info(" Active connections: " + getActiveConnections());
         logger.info("Forced Disconnecting all connections...");
-        closeAll();
+        this.closeAll();
         logger.info(" Active connections: " + getActiveConnections());
         List<AConnection> connectionList = getAConnectionList();
         dcPool.waitForDisconnectionTasks(connectionList);

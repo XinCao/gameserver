@@ -22,7 +22,7 @@ public abstract class AConnection {
     protected boolean closed;
     private long connectionDelay;
     protected final Object guard = new Object();
-    private boolean locked = false; //  Used only for PacketProcessor synchronization purpose
+    private boolean locked = false;
 
     public AConnection(SocketChannel sc, Dispatcher d) throws IOException {
         socketChannel = sc;
@@ -35,16 +35,12 @@ public abstract class AConnection {
         dispatcher.register(socketChannel, SelectionKey.OP_READ, this);
         InetAddress address = socketChannel.socket().getInetAddress();
         this.ip = null != address ? address.getHostAddress() : null;
-
     }
 
     final void setKey(SelectionKey key) {
         this.key = key;
     }
 
-    /**
-     * Notify Dispatcher Selector that we want write some data here.
-     */
     protected final void enableWriteInterest() {
         if (key.isValid()) {
             key.interestOps(key.interestOps() | SelectionKey.OP_WRITE);
@@ -52,12 +48,6 @@ public abstract class AConnection {
         }
     }
 
-    /**
-     * Connection will be closed at some time [by Dispatcher Thread], after that onDisconnect() method will be called to clear all other things.
-     *
-     * @param forced is just hint that getDisconnectionDelay() should return 0
-     * so OnDisconnect() method will be called without any delay.
-     */
     public final void close(boolean forced) {
         synchronized (guard) {
             if (isWriteDisabled()) {
@@ -68,11 +58,6 @@ public abstract class AConnection {
         }
     }
 
-    /**
-     * This will only close the connection without taking care of the rest. May be called only by Dispatcher Thread. Returns true if connection was not closed before.
-     *
-     * @return true if connection was not closed before.
-     */
     final boolean onlyClose() {
         /**
          * Test if this build should use assertion. If NetworkAssertion == false
@@ -98,33 +83,18 @@ public abstract class AConnection {
         return true;
     }
 
-    /**
-     * @return True if this connection is pendingClose and not closed yet.
-     */
     final boolean isPendingClose() {
         return pendingClose && !closed;
     }
 
-    /**
-     * @return True if write to this connection is possible.
-     */
     protected final boolean isWriteDisabled() {
         return pendingClose || closed;
     }
 
-    /**
-     * @return IP address of this Connection.
-     */
     public final String getIP() {
         return ip;
     }
 
-    /**
-     * Used only for PacketProcessor synchronization purpose. Return true if
-     * locked successful - if wasn't locked before.
-     *
-     * @return locked
-     */
     boolean tryLockConnection() {
         if (locked) {
             return false;
@@ -132,24 +102,14 @@ public abstract class AConnection {
         return locked = true;
     }
 
-    /**
-     * Used only for PacketProcessor synchronization purpose. Unlock this
-     * connection.
-     */
     void unlockConnection() {
         locked = false;
     }
     
-    /**
-     * @return Dispatcher to witch this connection is registered.
-     */
     final Dispatcher getDispatcher() {
         return dispatcher;
     }
 
-    /**
-     * @return SocketChannel representing this connection.
-     */
     public SocketChannel getSocketChannel() {
         return socketChannel;
     }
