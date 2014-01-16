@@ -8,14 +8,17 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import network.packet.BaseClientPacket;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 多线程处理包的所有逻辑
- * 
- * Packet Processor responsible for executing packets in correct order with respecting rules: - 1 packet / client at one time.execute packets in received order.
  *
- * 
+ * Packet Processor responsible for executing packets in correct order with
+ * respecting rules: - 1 packet / client at one time.execute packets in received
+ * order.
+ *
+ *
  * @author -Nemesiss-
  * @param <T> AConnection - owner of client packets.
  */
@@ -24,7 +27,7 @@ public class PacketProcessor<T extends AConnection> {
     /**
      * Logger for PacketProcessor
      */
-    private static final Logger log = Logger.getLogger(PacketProcessor.class.getName());
+    private static final Logger log = LoggerFactory.getLogger(PacketProcessor.class);
     /**
      * When one working thread should be killed.
      */
@@ -165,6 +168,7 @@ public class PacketProcessor<T extends AConnection> {
      * @author -Nemesiss-
      */
     private final class PacketProcessorTask implements Runnable {
+
         /**
          * {@inheritDoc}
          */
@@ -192,7 +196,9 @@ public class PacketProcessor<T extends AConnection> {
 
     /**
      *
-     * Checking if PacketProcessor is busy or idle and increasing / reducing numbers of threads.
+     * Checking if PacketProcessor is busy or idle and increasing / reducing
+     * numbers of threads.
+     *
      * @author -Nemesiss-
      */
     private final class CheckerTask implements Runnable {
@@ -211,27 +217,29 @@ public class PacketProcessor<T extends AConnection> {
          */
         @Override
         public void run() {
-            /* Sleep for some time */
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException e) { // we dont care
-            }
-
-            /* Number of packets waiting for execution */
-            int sizeNow = packets.size();
-
-            if (sizeNow < lastSize) {
-                if (sizeNow < reduceThreshold) {
-                    // too much threads
-                    killThread();
+            while (true) {
+                /* Sleep for some time */
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) { // we dont care
                 }
-            } else if (sizeNow > lastSize && sizeNow > increaseThreshold) {
-                // too low threads
-                if (!newThread() && sizeNow >= increaseThreshold * 3) {
-                    log.info("Lagg detected! [" + sizeNow + " client packets are waiting for execution]. You should consider increasing PacketProcessor maxThreads or hardware upgrade.");
+
+                /* Number of packets waiting for execution */
+                int sizeNow = packets.size();
+
+                if (sizeNow < lastSize) {
+                    if (sizeNow < reduceThreshold) {
+                        // too much threads
+                        killThread();
+                    }
+                } else if (sizeNow > lastSize && sizeNow > increaseThreshold) {
+                    // too low threads
+                    if (!newThread() && sizeNow >= increaseThreshold * 3) {
+                        log.info("Lagg detected! [" + sizeNow + " client packets are waiting for execution]. You should consider increasing PacketProcessor maxThreads or hardware upgrade.");
+                    }
                 }
+                lastSize = sizeNow;
             }
-            lastSize = sizeNow;
         }
     }
 }

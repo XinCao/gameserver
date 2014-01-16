@@ -7,7 +7,8 @@ import java.util.List;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 断开任务连接池
@@ -16,7 +17,7 @@ import org.apache.log4j.Logger;
  */
 public class DisconnectionThreadPoolImp implements DisconnectionThreadPool {
 
-    private static final Logger logger = Logger.getLogger(PacketProcessor.class.getName());
+    private static final Logger logger = LoggerFactory.getLogger(PacketProcessor.class);
     private final static int reduceThreshold = 3;
     private final static int increaseThreshold = 50;
     private final Lock lock = new ReentrantLock();
@@ -57,22 +58,24 @@ public class DisconnectionThreadPoolImp implements DisconnectionThreadPool {
 
         @Override
         public void run() {
-            try {
-                Thread.sleep(sleepTime);
-            } catch (InterruptedException e) {
-                System.out.println(e.getMessage());
-            }
-            int sizeNow = disconnectionTasks.size();
-            if (sizeNow < lastSize) {
-                if (sizeNow < reduceThreshold) {
-                    killThread();
+            while (true) {
+                try {
+                    Thread.sleep(sleepTime);
+                } catch (InterruptedException e) {
+                    System.out.println(e.getMessage());
                 }
-            } else if (sizeNow > lastSize && sizeNow > increaseThreshold) {
-                if (!newThread() && sizeNow >= increaseThreshold * 3) {
-                    logger.info("Lagg detected! [" + sizeNow + " DisconnectionTask are waiting for execution]. You should consider increasing DisconnectionThreadPool maxThreads or hardware upgrade.");
+                int sizeNow = disconnectionTasks.size();
+                if (sizeNow < lastSize) {
+                    if (sizeNow < reduceThreshold) {
+                        killThread();
+                    }
+                } else if (sizeNow > lastSize && sizeNow > increaseThreshold) {
+                    if (!newThread() && sizeNow >= increaseThreshold * 3) {
+                        logger.info("Lagg detected! [" + sizeNow + " DisconnectionTask are waiting for execution]. You should consider increasing DisconnectionThreadPool maxThreads or hardware upgrade.");
+                    }
                 }
+                lastSize = sizeNow;
             }
-            lastSize = sizeNow;
         }
     }
 
@@ -153,7 +156,7 @@ public class DisconnectionThreadPoolImp implements DisconnectionThreadPool {
 
     @Override
     public void waitForDisconnectionTasks(List<AConnection> list) {
-        for(AConnection a : list) {
+        for (AConnection a : list) {
             this.scheduleDisconnection(new DisconnectionTask(a), 0);
         }
     }

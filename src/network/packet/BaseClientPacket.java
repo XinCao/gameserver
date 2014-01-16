@@ -2,7 +2,8 @@ package network.packet;
 
 import network.AConnection;
 import java.nio.ByteBuffer;
-import org.apache.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 网络协议客户端基础包
@@ -12,7 +13,7 @@ import org.apache.log4j.Logger;
  */
 public abstract class BaseClientPacket<T extends AConnection> extends BasePacket implements Runnable {
 
-    private static final Logger log = Logger.getLogger(BaseClientPacket.class);
+    private static final Logger log = LoggerFactory.getLogger(BaseClientPacket.class);
     private T client;
     private ByteBuffer buf;
 
