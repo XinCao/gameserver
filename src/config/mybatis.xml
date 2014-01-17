@@ -98,5 +98,13 @@
             <ref bean="sqlSessionFactory"/>
         </property>
     </bean>
+    <bean id="itemLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+        <property name="mapperInterface">
+            <value>dao.ItemLogMapper</value>
+        </property>
+        <property name="sqlSessionFactory">
+            <ref bean="sqlSessionFactory"/>
+        </property>
+    </bean>
 
 </beans>

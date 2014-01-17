@@ -11,9 +11,10 @@ import org.slf4j.MarkerFactory;
 public class LogServiceImplementWithLogback implements LogService {
 
     private static final Logger logger = LoggerFactory.getLogger(LogService.class);
+
     @Override
     public void save_item_log(int playerId, String action, int itemTplId, long amount, int channel, String extraData) {
-         LogEntry entry = new LogEntry(
+        LogEntry entry = new LogEntry(
                 "ITEM",
                 playerId,
                 action,
