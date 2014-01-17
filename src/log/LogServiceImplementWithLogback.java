@@ -14,15 +14,7 @@ public class LogServiceImplementWithLogback implements LogService {
 
     @Override
     public void save_item_log(int playerId, String action, int itemTplId, long amount, int channel, String extraData) {
-        LogEntry entry = new LogEntry(
-                "ITEM",
-                playerId,
-                action,
-                itemTplId,
-                amount,
-                channel,
-                extraData);
-
+        LogEntry entry = new LogEntry("ITEM", playerId, action, itemTplId, amount, channel, extraData);
         logger.info(MarkerFactory.getMarker("GAME_EVENT.ITEM"), entry.toString());
     }
 }
