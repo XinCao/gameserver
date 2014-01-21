@@ -1,6 +1,5 @@
 package mina.message;
 
-import org.apache.mina.core.session.IoSession;
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
@@ -18,14 +17,9 @@ public class MessageManagement implements ApplicationContextAware {
         MessageManagement.ac = ac;
     }
 
-    public static ClientMessage getClientMessage(IoSession ioSession, short messageId) {
-        if (messageId == 0x01) {
-            return new LoginClientMessage(ac);
-        }
-        return null;
-    }
-
-    public static ServerMessage getServerMessage(short messageId) {
-        return new LoginServerMessage();
+    public static <T extends BaseMessage> T getMessageByOpcode(short messageId) {
+        BaseMessage baseMessage = MessageConf.getMessageByOpcode(messageId);
+        baseMessage.setAc(ac);
+        return (T) baseMessage;
     }
 }

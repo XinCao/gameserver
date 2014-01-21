@@ -10,13 +10,15 @@ public class ProtocolEncoder implements MessageEncoder<ServerMessage> {
 
     @Override
     public void encode(IoSession session, ServerMessage serverMessage, ProtocolEncoderOutput output) throws Exception {
-        IoBuffer ioBuffer = IoBuffer.allocate(100).setAutoExpand(true);
-        IoBuffer databuf = serverMessage.write(ioBuffer);
-        buf.putShort((short) (1000 + message.getTag()));
-        buf.putInt(message.getLength());
-        buf.put(databuf);
-        buf.flip();
-        output.write(buf);
+        IoBuffer ioBuffer = IoBuffer.allocate(256).setAutoExpand(true);
+        ioBuffer.putShort(serverMessage.getMessageId());
+        IoBuffer data = IoBuffer.allocate(128).setAutoExpand(true);
+        serverMessage.write(data);
+        data.flip();
+        ioBuffer.putInt(data.capacity());
+        ioBuffer.put(data);
+        ioBuffer.flip();
+        output.write(ioBuffer);
         output.flush();
     }
 }

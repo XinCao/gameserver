@@ -24,11 +24,11 @@ public class ProtocolDecoder implements MessageDecoder {
     @Override
     public MessageDecoderResult decodable(IoSession session, IoBuffer in) {
         if (in.remaining() < 6) {
-            return MessageDecoderResult.NEED_DATA;
+            return MessageDecoderResult.NOT_OK;
         }
         in.getShort();
         if (in.remaining() < in.getInt()) {
-            return MessageDecoderResult.NEED_DATA;
+            return MessageDecoderResult.NOT_OK;
         }
         return MessageDecoderResult.OK;
     }
@@ -46,7 +46,7 @@ public class ProtocolDecoder implements MessageDecoder {
     public MessageDecoderResult decode(IoSession ioSession, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
         short messageId = in.getShort();
         in.getInt();
-        ClientMessage clientMessage =MessageManagement.getClientMessage(ioSession, messageId);
+        ClientMessage clientMessage =MessageManagement.getMessageByOpcode(messageId);
         clientMessage.read(in.buf());
         out.write(clientMessage);
         return MessageDecoderResult.OK;
