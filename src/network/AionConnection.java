@@ -10,8 +10,6 @@ import java.nio.channels.SocketChannel;
  */
 public class AionConnection extends AConnection {
 
-    
-    
     public AionConnection(SocketChannel sc, Dispatcher d) throws IOException {
         super(sc, d);
     }
@@ -19,8 +17,6 @@ public class AionConnection extends AConnection {
     @Override
     protected boolean processData(ByteBuffer data) {
         int packetId = data.getShort();
-        
-        
         
         
         

@@ -44,7 +44,7 @@ public class NioServer {
 
     public void startNioServer() {
         try {
-            this.initDispatchers(readWriteThreads, dcPool);
+            this.initDispatchers(this.readWriteThreads, this.dcPool);
             for (ServerCfg cfg : cfgs) {
                 ServerSocketChannel serverChannel = ServerSocketChannel.open();
                 serverChannel.configureBlocking(false);
