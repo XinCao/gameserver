@@ -8,8 +8,16 @@ import java.nio.ByteBuffer;
  */
 public class LoginClientPacket extends ClientPacket {
 
+    private String str;
+
     @Override
-    protected void readImp(ByteBuffer bytebuffer) {
+    protected void readImp(ByteBuffer byteBuffer) {
+        StringBuilder sb = new StringBuilder();
+        int lenght = byteBuffer.getInt();
+        for (int i = 0; i < lenght; i++) {
+            sb.append((char)(byteBuffer.get()));
+        }
+        this.str = sb.toString();
     }
 
     @Override
@@ -19,6 +27,6 @@ public class LoginClientPacket extends ClientPacket {
 
     @Override
     public void perform() {
-        System.out.println("i have login game!");
+        System.out.println(this.str);
     }
 }

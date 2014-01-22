@@ -41,14 +41,16 @@ public class SocketClient {
         String str;
         while ((str = bufferedReader.readLine()) != null) {
             byteBuffer.putInt(str.length());
+            byteBuffer.putInt(str.length());
             for (int i = 0; i < str.length(); i++) {
-                byteBuffer.putChar(str.charAt(i));
+                byteBuffer.put((byte)(str.charAt(i)));
             }
             byteBuffer.flip();
             if (byteBuffer.hasArray()) {
                 byte[] data = byteBuffer.array();
                 outputStream.write(data);
             }
+            byteBuffer.clear();
         }
     }
 }

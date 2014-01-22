@@ -31,7 +31,6 @@ public class ProtocolDecoder implements MessageDecoder {
         if (remaining < 6) {
             return MessageDecoderResult.NOT_OK;
         }
-        in.getShort();
         if (lastRemaining < len) {
             return MessageDecoderResult.NOT_OK;
         }
@@ -56,6 +55,7 @@ public class ProtocolDecoder implements MessageDecoder {
             return MessageDecoderResult.NOT_OK;
         }
         clientPacket.read(in.buf());
+        in.clear();
         out.write(clientPacket);
         return MessageDecoderResult.OK;
     }

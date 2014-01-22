@@ -28,7 +28,7 @@ public class PacketHandler extends IoHandlerAdapter {
         if (clientPacket.canPerform()) {
             clientPacket.perform();
         }
-        super.messageReceived(session, clientPacket);
+        super.messageReceived(session, object);
     }
 
     /**
