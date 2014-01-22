@@ -1,8 +1,9 @@
 package mina;
 
-import mina.message.ClientMessage;
-import mina.message.MessageManagement;
-import mina.message.ServerMessage;
+import mina.message.ClientPacket;
+import mina.message.PacketKind;
+import mina.message.PacketManagement;
+import mina.message.ServerPacket;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
@@ -23,11 +24,11 @@ public class MessageHandler extends IoHandlerAdapter {
      */
     @Override
     public void messageReceived(IoSession session, Object object) throws Exception {
-        ClientMessage clientMessage = (ClientMessage)object;
-        if (clientMessage.canPerform()) {
-            clientMessage.perform();
+        ClientPacket clientPacket = (ClientPacket)object;
+        if (clientPacket.canPerform()) {
+            clientPacket.perform();
         }
-        super.messageReceived(session, clientMessage);
+        super.messageReceived(session, clientPacket);
     }
 
     /**
@@ -39,11 +40,11 @@ public class MessageHandler extends IoHandlerAdapter {
      */
     @Override
     public void messageSent(IoSession session, Object object) throws Exception {
-        ServerMessage serverMessage = (ServerMessage)object;
-        if (serverMessage.canPerform()) {
-            serverMessage.perform();
+        ServerPacket serverPacket = (ServerPacket)object;
+        if (serverPacket.canPerform()) {
+            serverPacket.perform();
         }
-        super.messageSent(session, serverMessage);
+        super.messageSent(session, serverPacket);
     }
 
     /**
@@ -71,7 +72,7 @@ public class MessageHandler extends IoHandlerAdapter {
      */
     @Override
     public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
-        session.write(MessageManagement.getMessageByOpcode((short)0x01));
+        session.write(PacketManagement.getPacketByOpcode(PacketKind.IDEL_PACKET.getOpcode()));
         super.sessionIdle(session, status);
     }
 

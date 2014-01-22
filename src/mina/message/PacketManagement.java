@@ -8,18 +8,18 @@ import org.springframework.context.ApplicationContextAware;
  *
  * @author caoxin
  */
-public class MessageManagement implements ApplicationContextAware {
+public class PacketManagement implements ApplicationContextAware {
 
     private static ApplicationContext ac;
 
     @Override
     public void setApplicationContext(ApplicationContext ac) throws BeansException {
-        MessageManagement.ac = ac;
+        PacketManagement.ac = ac;
     }
 
-    public static <T extends BaseMessage> T getMessageByOpcode(short messageId) {
-        BaseMessage baseMessage = MessageConf.getMessageByOpcode(messageId);
-        baseMessage.setAc(ac);
-        return (T) baseMessage;
+    public static <T extends BasePacket> T getPacketByOpcode(short opcode) {
+        BasePacket basePacket = PacketKind.getPacketByOpcode(opcode);
+        basePacket.setAc(ac);
+        return (T) basePacket;
     }
 }

@@ -1,7 +1,7 @@
 package mina;
 
-import mina.message.ClientMessage;
-import mina.message.MessageManagement;
+import mina.message.ClientPacket;
+import mina.message.PacketManagement;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
@@ -23,11 +23,16 @@ public class ProtocolDecoder implements MessageDecoder {
      */
     @Override
     public MessageDecoderResult decodable(IoSession session, IoBuffer in) {
-        if (in.remaining() < 6) {
+        int remaining = in.remaining();
+        int opcode = in.getShort();
+        int len = in.getInt();
+        int lastRemaining = in.remaining();
+        System.out.println(remaining + "\t" + opcode + "\t" + len + "\t" + lastRemaining);
+        if (remaining < 6) {
             return MessageDecoderResult.NOT_OK;
         }
         in.getShort();
-        if (in.remaining() < in.getInt()) {
+        if (lastRemaining < len) {
             return MessageDecoderResult.NOT_OK;
         }
         return MessageDecoderResult.OK;
@@ -44,11 +49,14 @@ public class ProtocolDecoder implements MessageDecoder {
      */
     @Override
     public MessageDecoderResult decode(IoSession ioSession, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
-        short messageId = in.getShort();
+        short opcode = in.getShort();
         in.getInt();
-        ClientMessage clientMessage =MessageManagement.getMessageByOpcode(messageId);
-        clientMessage.read(in.buf());
-        out.write(clientMessage);
+        ClientPacket clientPacket =PacketManagement.getPacketByOpcode(opcode);
+        if (clientPacket == null) {
+            return MessageDecoderResult.NOT_OK;
+        }
+        clientPacket.read(in.buf());
+        out.write(clientPacket);
         return MessageDecoderResult.OK;
     }
 

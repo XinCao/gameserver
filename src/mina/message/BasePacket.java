@@ -8,12 +8,12 @@ import org.springframework.context.ApplicationContext;
  *
  * @author caoxin
  */
-public abstract class BaseMessage implements Cloneable {
+public abstract class BasePacket implements Cloneable {
 
-    protected Logger logger = LoggerFactory.getLogger(ClientMessage.class);
-    private short messageId;
+    protected Logger logger = LoggerFactory.getLogger(ClientPacket.class);
+    private short opcode;
     protected ApplicationContext ac;
-    private MessageType messageType;
+    private PacketType packetType;
     private Status status;
 
     public void setAc(ApplicationContext ac) {
@@ -31,20 +31,20 @@ public abstract class BaseMessage implements Cloneable {
         return super.clone();
     }
 
-    public short getMessageId() {
-        return messageId;
+    public short getOpcode() {
+        return opcode;
     }
 
-    public void setMessageId(short messageId) {
-        this.messageId = messageId;
+    public void setOpcode(short opcode) {
+        this.opcode = opcode;
     }
 
-    public MessageType getMessageType() {
-        return messageType;
+    public PacketType getPacketType() {
+        return packetType;
     }
 
-    public void setMessageType(MessageType messageType) {
-        this.messageType = messageType;
+    public void setPacketType(PacketType packetType) {
+        this.packetType = packetType;
     }
 
     public Status getStatus() {

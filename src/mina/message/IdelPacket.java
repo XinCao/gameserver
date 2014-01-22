@@ -1,9 +1,8 @@
-package mina;
+package mina.message;
 
-import mina.message.ServerMessage;
 import org.apache.mina.core.buffer.IoBuffer;
 
-public class IdelMessage extends ServerMessage {
+public class IdelPacket extends ServerPacket {
 
     @Override
     protected void writeImp(IoBuffer ioBuffer) {

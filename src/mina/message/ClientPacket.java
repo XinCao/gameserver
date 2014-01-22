@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
  *
  * @author caoxin
  */
-public abstract class ClientMessage extends BaseMessage {
+public abstract class ClientPacket extends BasePacket {
 
     public void read(ByteBuffer byteBuffer) {
         readImp(byteBuffer);

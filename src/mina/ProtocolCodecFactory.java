@@ -1,14 +1,14 @@
 package mina;
 
-import mina.message.ServerMessage;
+import mina.message.ServerPacket;
 import org.apache.mina.filter.codec.demux.DemuxingProtocolCodecFactory;
 import org.apache.mina.filter.codec.demux.MessageDecoder;
 import org.apache.mina.filter.codec.demux.MessageEncoder;
 
 public class ProtocolCodecFactory extends DemuxingProtocolCodecFactory {
 
-    public ProtocolCodecFactory(MessageDecoder decoder, MessageEncoder<ServerMessage> encoder) {
+    public ProtocolCodecFactory(MessageDecoder decoder, MessageEncoder<ServerPacket> encoder) {
         addMessageDecoder(decoder);
-        addMessageEncoder(ServerMessage.class, encoder);
+        addMessageEncoder(ServerPacket.class, encoder);
     }
 }

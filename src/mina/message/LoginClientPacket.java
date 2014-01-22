@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
  *
  * @author caoxin
  */
-public class LoginClientMessage extends ClientMessage {
+public class LoginClientPacket extends ClientPacket {
 
     @Override
     protected void readImp(ByteBuffer bytebuffer) {
@@ -19,5 +19,6 @@ public class LoginClientMessage extends ClientMessage {
 
     @Override
     public void perform() {
+        System.out.println("i have login game!");
     }
 }
