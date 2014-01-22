@@ -14,8 +14,9 @@ public class ProtocolEncoder implements MessageEncoder<ServerPacket> {
         ioBuffer.putShort(serverMessage.getOpcode());
         IoBuffer data = IoBuffer.allocate(128).setAutoExpand(true);
         serverMessage.write(data);
+        ioBuffer.putInt(data.position() - data.arrayOffset());
+        System.out.println(data.position() + "\t" + data.arrayOffset() + "\t" + (data.position() - data.arrayOffset()));
         data.flip();
-        ioBuffer.putInt(data.capacity());
         ioBuffer.put(data);
         ioBuffer.flip();
         output.write(ioBuffer);

@@ -8,7 +8,7 @@ import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
 
-public class MessageHandler extends IoHandlerAdapter {
+public class PacketHandler extends IoHandlerAdapter {
 
     @Override
     public void exceptionCaught(IoSession session, Throwable cause) throws Exception {

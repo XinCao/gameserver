@@ -20,7 +20,7 @@ public class NioServer {
         cfg.setTcpNoDelay(true);
         acceptor.setReuseAddress(true);
         cfg.setIdleTime(IdleStatus.BOTH_IDLE, 5);
-        acceptor.setHandler(new MessageHandler());
+        acceptor.setHandler(new PacketHandler());
         acceptor.bind(new InetSocketAddress(8000));
     }
 }
