@@ -24,10 +24,5 @@
     <property name="properties" ref="systemConfigProperties" />
   </bean>
   
-  <!--导入数据库配置-->
-  <import resource="jmx.xml"/>
-  <import resource="service.xml"/>
-  <import resource="event_listener.xml"/>
-  <import resource="memcached.xml"/>
-  <import resource="aop.xml"/>
+  <bean id="packetManagement" class="mina.message.PacketManagement"></bean>
 </beans>

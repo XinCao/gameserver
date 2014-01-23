@@ -1,7 +1,7 @@
 package mina;
 
-import mina.message.BaseClientPacket;
-import mina.message.PacketManagement;
+import mina.core.BaseClientPacket;
+import mina.core.PacketManagement;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
@@ -12,19 +12,19 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 接受的二进制流不能有多余的数据（很蹩脚）
- * 
+ *
  * @author caoxin
  */
 public class ProtocolDecoder implements MessageDecoder {
-    
+
     private Logger logger = LoggerFactory.getLogger(ProtocolDecoder.class);
 
     /**
      * 判断接受到二进制流,是否可以进行解析
-     * 
+     *
      * @param session
      * @param in
-     * @return 
+     * @return
      */
     @Override
     public MessageDecoderResult decodable(IoSession session, IoBuffer in) {
@@ -44,32 +44,33 @@ public class ProtocolDecoder implements MessageDecoder {
 
     /**
      * 解析接受客户端的二进制流
-     * 
+     *
      * @param ioSession
      * @param in
      * @param out
      * @return
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public MessageDecoderResult decode(IoSession ioSession, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
         short opcode = in.getShort();
         in.getInt();
-        BaseClientPacket clientPacket =PacketManagement.getPacketByOpcode(opcode);
+        BaseClientPacket clientPacket = PacketManagement.getPacketByOpcode(opcode);
         if (clientPacket == null) {
             return MessageDecoderResult.NOT_OK;
         }
         clientPacket.read(in.buf());
+        clientPacket.setIoSession(ioSession);
         out.write(clientPacket);
         return MessageDecoderResult.OK;
     }
 
     /**
      * 完成解析工作
-     * 
+     *
      * @param session
      * @param out
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public void finishDecode(IoSession session, ProtocolDecoderOutput out) throws Exception {

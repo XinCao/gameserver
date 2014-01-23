@@ -1,4 +1,4 @@
-package mina.message;
+package mina.core;
 
 /**
  *

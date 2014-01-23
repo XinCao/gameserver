@@ -1,4 +1,4 @@
-package mina.client;
+package mina.test;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;

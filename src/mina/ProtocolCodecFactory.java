@@ -1,6 +1,6 @@
 package mina;
 
-import mina.message.BaseServerPacket;
+import mina.core.BaseServerPacket;
 import org.apache.mina.filter.codec.demux.DemuxingProtocolCodecFactory;
 import org.apache.mina.filter.codec.demux.MessageDecoder;
 import org.apache.mina.filter.codec.demux.MessageEncoder;

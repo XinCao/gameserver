@@ -1,5 +1,6 @@
-package mina.message;
+package mina.core;
 
+import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -15,6 +16,7 @@ public abstract class BasePacket implements Cloneable {
     protected ApplicationContext ac;
     private PacketType packetType;
     private Status status;
+    protected IoSession ioSession;
 
     public void setAc(ApplicationContext ac) {
         this.ac = ac;
@@ -53,5 +55,13 @@ public abstract class BasePacket implements Cloneable {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public IoSession getIoSession() {
+        return ioSession;
+    }
+
+    public void setIoSession(IoSession ioSession) {
+        this.ioSession = ioSession;
     }
 }

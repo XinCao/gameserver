@@ -1,9 +1,9 @@
 package mina;
 
-import mina.message.BaseClientPacket;
-import mina.message.PacketKind;
-import mina.message.PacketManagement;
-import mina.message.BaseServerPacket;
+import mina.core.BaseClientPacket;
+import mina.core.PacketKind;
+import mina.core.PacketManagement;
+import mina.core.BaseServerPacket;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;

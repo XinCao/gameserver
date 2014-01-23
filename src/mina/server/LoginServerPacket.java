@@ -1,5 +1,6 @@
-package mina.message;
+package mina.server;
 
+import mina.core.BaseServerPacket;
 import org.apache.mina.core.buffer.IoBuffer;
 
 /**

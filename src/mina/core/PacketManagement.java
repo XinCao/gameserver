@@ -1,4 +1,4 @@
-package mina.message;
+package mina.core;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;

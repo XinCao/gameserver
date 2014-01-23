@@ -1,5 +1,7 @@
-package mina.message;
+package mina.core;
 
+import mina.server.LoginServerPacket;
+import mina.client.LoginClientPacket;
 import java.util.HashMap;
 import java.util.Map;
 import org.slf4j.LoggerFactory;

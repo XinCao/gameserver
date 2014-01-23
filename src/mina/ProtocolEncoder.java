@@ -1,6 +1,6 @@
 package mina;
 
-import mina.message.BaseServerPacket;
+import mina.core.BaseServerPacket;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolEncoderOutput;
