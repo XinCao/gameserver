@@ -2,7 +2,7 @@ package mina.message;
 
 import org.apache.mina.core.buffer.IoBuffer;
 
-public class IdelPacket extends ServerPacket {
+public class IdelPacket extends BaseServerPacket {
 
     @Override
     protected void writeImp(IoBuffer ioBuffer) {
@@ -12,6 +12,6 @@ public class IdelPacket extends ServerPacket {
 
     @Override
     public void perform() {
-         logger.debug("a heartbeat");
+         logger.debug("a heart beat!");
     }
 }

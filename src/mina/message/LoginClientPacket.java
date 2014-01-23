@@ -6,7 +6,7 @@ import java.nio.ByteBuffer;
  *
  * @author caoxin
  */
-public class LoginClientPacket extends ClientPacket {
+public class LoginClientPacket extends BaseClientPacket {
 
     private String str;
 

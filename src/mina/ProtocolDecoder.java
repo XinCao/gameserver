@@ -1,6 +1,6 @@
 package mina;
 
-import mina.message.ClientPacket;
+import mina.message.BaseClientPacket;
 import mina.message.PacketManagement;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
@@ -10,6 +10,11 @@ import org.apache.mina.filter.codec.demux.MessageDecoderResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * 接受的二进制流不能有多余的数据（很蹩脚）
+ * 
+ * @author caoxin
+ */
 public class ProtocolDecoder implements MessageDecoder {
     
     private Logger logger = LoggerFactory.getLogger(ProtocolDecoder.class);
@@ -32,7 +37,7 @@ public class ProtocolDecoder implements MessageDecoder {
             return MessageDecoderResult.NOT_OK;
         }
         if (lastRemaining < len) {
-            return MessageDecoderResult.NOT_OK;
+            return MessageDecoderResult.NEED_DATA;
         }
         return MessageDecoderResult.OK;
     }
@@ -50,12 +55,11 @@ public class ProtocolDecoder implements MessageDecoder {
     public MessageDecoderResult decode(IoSession ioSession, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
         short opcode = in.getShort();
         in.getInt();
-        ClientPacket clientPacket =PacketManagement.getPacketByOpcode(opcode);
+        BaseClientPacket clientPacket =PacketManagement.getPacketByOpcode(opcode);
         if (clientPacket == null) {
             return MessageDecoderResult.NOT_OK;
         }
         clientPacket.read(in.buf());
-        in.clear();
         out.write(clientPacket);
         return MessageDecoderResult.OK;
     }

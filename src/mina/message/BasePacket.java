@@ -10,7 +10,7 @@ import org.springframework.context.ApplicationContext;
  */
 public abstract class BasePacket implements Cloneable {
 
-    protected Logger logger = LoggerFactory.getLogger(ClientPacket.class);
+    protected Logger logger = LoggerFactory.getLogger(this.getClass());
     private short opcode;
     protected ApplicationContext ac;
     private PacketType packetType;

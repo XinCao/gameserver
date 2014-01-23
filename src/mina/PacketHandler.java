@@ -1,9 +1,9 @@
 package mina;
 
-import mina.message.ClientPacket;
+import mina.message.BaseClientPacket;
 import mina.message.PacketKind;
 import mina.message.PacketManagement;
-import mina.message.ServerPacket;
+import mina.message.BaseServerPacket;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
 import org.apache.mina.core.session.IoSession;
@@ -24,7 +24,7 @@ public class PacketHandler extends IoHandlerAdapter {
      */
     @Override
     public void messageReceived(IoSession session, Object object) throws Exception {
-        ClientPacket clientPacket = (ClientPacket)object;
+        BaseClientPacket clientPacket = (BaseClientPacket)object;
         if (clientPacket.canPerform()) {
             clientPacket.perform();
         }
@@ -40,7 +40,7 @@ public class PacketHandler extends IoHandlerAdapter {
      */
     @Override
     public void messageSent(IoSession session, Object object) throws Exception {
-        ServerPacket serverPacket = (ServerPacket)object;
+        BaseServerPacket serverPacket = (BaseServerPacket)object;
         if (serverPacket.canPerform()) {
             serverPacket.perform();
         }

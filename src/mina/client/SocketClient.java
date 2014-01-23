@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.nio.ByteBuffer;
+import java.util.Arrays;
 
 /**
  *
@@ -36,19 +37,18 @@ public class SocketClient {
         }
         Socket socket = new Socket(ip, port);
         OutputStream outputStream = socket.getOutputStream();
-        ByteBuffer byteBuffer = ByteBuffer.allocate(128);
-        byteBuffer.putShort((short) opcode);
+        ByteBuffer byteBuffer = ByteBuffer.allocate(256);
         String str;
         while ((str = bufferedReader.readLine()) != null) {
+            byteBuffer.putShort((short) opcode);
             byteBuffer.putInt(str.length());
             byteBuffer.putInt(str.length());
             for (int i = 0; i < str.length(); i++) {
                 byteBuffer.put((byte)(str.charAt(i)));
             }
-            byteBuffer.flip();
             if (byteBuffer.hasArray()) {
-                byte[] data = byteBuffer.array();
-                outputStream.write(data);
+                byte[] b = Arrays.copyOfRange(byteBuffer.array(), byteBuffer.arrayOffset(), byteBuffer.position());
+                outputStream.write(b);
             }
             byteBuffer.clear();
         }
