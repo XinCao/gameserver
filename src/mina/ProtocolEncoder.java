@@ -1,5 +1,6 @@
 package mina;
 
+import java.util.Arrays;
 import mina.core.BaseServerPacket;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
@@ -18,7 +19,7 @@ public class ProtocolEncoder implements MessageEncoder<BaseServerPacket> {
 //        int length = ioBuffer.position() - curPostion;
 //        ioBuffer.position(4);
 //        ioBuffer.putInt(length);
-//        ioBuffer.flip();
+//        ioBuffer.position();
 //        byte[] b = Arrays.copyOfRange(ioBuffer.array(), ioBuffer.arrayOffset(), length + 6);
 //        output.write(b);
 //        output.flush();
@@ -31,9 +32,9 @@ public class ProtocolEncoder implements MessageEncoder<BaseServerPacket> {
         int curPostion = ioBuffer.position();
         serverMessage.write(ioBuffer);
         int length = ioBuffer.position() - curPostion;
-        ioBuffer.position(4);
+        ioBuffer.position(2);
         ioBuffer.putInt(length);
-        ioBuffer.flip();
+        ioBuffer.position(0);
         output.write(ioBuffer);
         output.flush();
     }

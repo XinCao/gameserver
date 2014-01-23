@@ -3,6 +3,8 @@ package mina.client;
 import java.nio.ByteBuffer;
 import entity.Player;
 import mina.core.BaseClientPacket;
+import mina.core.PacketKind;
+import mina.core.PacketManagement;
 
 /**
  *
@@ -41,5 +43,6 @@ public class LoginClientPacket extends BaseClientPacket {
         }
         logger.debug("player object bind to IoSession " + flag + " !");
         System.out.println(this.str);
+        this.ioSession.write(PacketManagement.getPacketByOpcode(PacketKind.LOGIN_SERVER_PACKET.getOpcode()));
     }
 }

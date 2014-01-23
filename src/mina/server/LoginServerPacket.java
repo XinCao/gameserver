@@ -11,6 +11,11 @@ public class LoginServerPacket extends BaseServerPacket {
 
     @Override
     protected void writeImp(IoBuffer ioBuffer) {
+        String str = "hello world!";
+        for (int i = 0; i < str.length(); i++) {
+            ioBuffer.putChar(str.charAt(i));
+        }
+        logger.debug(str);
     }
 
     @Override
