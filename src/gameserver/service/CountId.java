@@ -1,4 +1,4 @@
-package util;
+package gameserver.service;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -8,7 +8,6 @@ import java.util.Map;
  * @author caoxin
  */
 public enum CountId {
-
     CAST_TEST(0, -1, false, false, true),
     FORCEITEM_CONTROL(100, -1, true, false, true), // 强化次数控制
     GOLDMEONY2MONEY(101, -1, true, true, true), // 每天钻石兑换金币的次数
@@ -99,7 +98,6 @@ public enum CountId {
     public int value() {
         return value;
     }
-
     private static final Map<Integer, CountId> enumMap = new HashMap<Integer, CountId>();
 
     static {

@@ -1,9 +1,12 @@
 package mina.core;
 
-import mina.server.LoginServerPacket;
-import mina.client.LoginClientPacket;
+import mina.server.SM_IDEL;
+import mina.server.SM_LOGIN;
+import mina.client.CM_LOGIN;
 import java.util.HashMap;
 import java.util.Map;
+import mina.server.SM_COOLDOWN;
+import mina.server.SM_COUNT_SYNC;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -13,9 +16,11 @@ import org.slf4j.Logger;
  */
 public enum PacketKind {
 
-    LOGIN_CLIENT_PACKET(Status.LOGIN_GAME, PacketType.CLIENT, (short) 0x01, LoginClientPacket.class),
-    LOGIN_SERVER_PACKET(Status.LOGIN_GAME, PacketType.SERVER, (short) 0x02, LoginServerPacket.class),
-    IDEL_PACKET(Status.LOGIN_GAME, PacketType.SERVER, (short) 0x03, IdelPacket.class),
+    CM_LOGIN(Status.LOGIN_GAME, PacketType.CLIENT, (short) 0x01, CM_LOGIN.class),
+    SM_LOGIN(Status.LOGIN_GAME, PacketType.SERVER, (short) 0x02, SM_LOGIN.class),
+    SM_IDEL(Status.LOGIN_GAME, PacketType.SERVER, (short) 0x03, SM_IDEL.class),
+    SM_COOLDOWN(Status.IN_GAME, PacketType.SERVER, (short) 0x4, SM_COOLDOWN.class),
+    SM_COUNT_SYNC(Status.IN_GAME, PacketType.SERVER, (short) 0x5, SM_COUNT_SYNC.class),
     ;
     private static final Logger logger = LoggerFactory.getLogger(PacketKind.class);
     private Status status;

@@ -7,7 +7,7 @@ import org.apache.mina.core.buffer.IoBuffer;
  *
  * @author caoxin
  */
-public class LoginServerPacket extends BaseServerPacket {
+public class SM_LOGIN extends BaseServerPacket {
 
     @Override
     protected void writeImp(IoBuffer ioBuffer) {

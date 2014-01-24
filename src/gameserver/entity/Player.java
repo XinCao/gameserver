@@ -1,5 +1,8 @@
 package gameserver.entity;
 
+import gameserver.service.CoolDownManager;
+import gameserver.service.CountManager;
+import mina.core.BaseServerPacket;
 import org.apache.mina.core.session.IoSession;
 
 /**
@@ -8,16 +11,9 @@ import org.apache.mina.core.session.IoSession;
  */
 public class Player {
 
-    private boolean loginOk = false;
     private IoSession ioSession;
-
-    public boolean isLoginOk() {
-        return loginOk;
-    }
-
-    public void setLoginOk(boolean loginOk) {
-        this.loginOk = loginOk;
-    }
+    private CoolDownManager coolManager;
+    private CountManager countManager;
 
     public IoSession getIoSession() {
         return ioSession;
@@ -25,5 +21,30 @@ public class Player {
 
     public void setIoSession(IoSession ioSession) {
         this.ioSession = ioSession;
+    }
+
+    public CoolDownManager getCoolManager() {
+        return coolManager;
+    }
+
+    public void setCoolManager(CoolDownManager coolDownManager) {
+        this.coolManager = coolDownManager;
+    }
+
+    public CountManager getCountManager() {
+        return countManager;
+    }
+
+    public void setCountManager(CountManager countManager) {
+        this.countManager = countManager;
+    }
+
+    /**
+     * 向客户端发送消息
+     *
+     * @param baseServerPacket
+     */
+    public <T extends BaseServerPacket> void sendPacket(T o) {
+        this.ioSession.write(o);
     }
 }

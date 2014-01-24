@@ -72,7 +72,7 @@ public class PacketHandler extends IoHandlerAdapter {
      */
     @Override
     public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
-        session.write(PacketManagement.getPacketByOpcode(PacketKind.IDEL_PACKET.getOpcode()));
+        session.write(PacketManagement.getPacketByOpcode(PacketKind.SM_IDEL.getOpcode()));
         super.sessionIdle(session, status);
     }
 

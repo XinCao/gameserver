@@ -10,7 +10,7 @@ import mina.core.PacketManagement;
  *
  * @author caoxin
  */
-public class LoginClientPacket extends BaseClientPacket {
+public class CM_LOGIN extends BaseClientPacket {
 
     private String str;
 
@@ -33,17 +33,10 @@ public class LoginClientPacket extends BaseClientPacket {
     public void perform() {
         if (true) {
             Player player = new Player();
-            player.setLoginOk(true);
             ioSession.setAttribute("currentPlayer", player);
             player.setIoSession(ioSession);
         }
-        Player currentPlayer = (Player) (ioSession.getAttribute("currentPlayer"));
-        String flag = "failure";
-        if (currentPlayer.isLoginOk()) {
-            flag = "success";
-        }
-        logger.debug("player object bind to IoSession " + flag + " !");
         System.out.println(this.str);
-        this.ioSession.write(PacketManagement.getPacketByOpcode(PacketKind.LOGIN_SERVER_PACKET.getOpcode()));
+        this.ioSession.write(PacketManagement.getPacketByOpcode(PacketKind.SM_LOGIN.getOpcode()));
     }
 }

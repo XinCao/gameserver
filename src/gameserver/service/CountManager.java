@@ -1,24 +1,31 @@
-package util;
+package gameserver.service;
 
-import java.io.Serializable;
+import gameserver.config.PlayerConfig;
+import gameserver.entity.Int3;
+import gameserver.entity.Player;
 import java.nio.ByteBuffer;
 import java.util.Iterator;
 import java.util.Map;
 import javolution.util.FastMap;
+import mina.core.PacketKind;
+import mina.core.PacketManagement;
+import mina.server.SM_COUNT_SYNC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 
 /**
  *
  * @author caoxin
  */
-public class CountManager implements Serializable {
+public class CountManager {
 
     private static Logger log = LoggerFactory.getLogger(CountManager.class);
-    private Map<CountId, CountInfo> countMap = new FastMap<CountId, CountInfo>();
+    private FastMap<CountId, CountInfo> countMap = new FastMap<CountId, CountInfo>();
+    private final Player player;
 
     /**
-     * 存放玩家最大次数和当前次数信息
+     * 内部类，存放玩家最大次数和当前次数信息
      */
     public class CountInfo {
 
@@ -33,6 +40,10 @@ public class CountManager implements Serializable {
 
     public Map<CountId, CountInfo> getCountMap() {
         return countMap;
+    }
+
+    public CountManager(Player owner) {
+        this.player = owner;
     }
 
     /**
@@ -68,20 +79,16 @@ public class CountManager implements Serializable {
         countMap.put(id, new CountInfo(current, max));
     }
 
-    /**
-     * 设置计数
-     *
-     * @param id
-     * @param cur
-     */
     public void setCount(CountId id, int cur) {
         CountInfo ci = countMap.get(id);
         ci.cur = cur;
-//        PacketSendUtility.sendPacket(player, new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max)));
+        SM_COUNT_SYNC sm_count_sync = PacketManagement.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+        sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+        player.sendPacket(sm_count_sync);
     }
 
     /**
-     * 消耗一个计数
+     * 消耗一个计数（扣除模式）
      *
      * @param id
      */
@@ -89,21 +96,23 @@ public class CountManager implements Serializable {
         if (id.isUpperLimited()) {
             if (hasCount(id)) {
                 countMap.get(id).cur -= 1;
-//                if (id.isSync() && player != null) {
-//                    PacketSendUtility.sendPacket(player, new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max)));
-//                }
+                if (id.isSync() && player != null) {
+                    SM_COUNT_SYNC sm_count_sync = PacketManagement.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+                    sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                    player.sendPacket(sm_count_sync);
+                }
             } else {
                 log.error("企图消耗一种错误的Count " + id.value());
             }
         }
     }
-    
+
     /**
      * 添加多个购买数 当前个 最大数都累加
-     * 
+     *
      * @param id
      * @param count
-     * @return 
+     * @return
      */
     public boolean addMultiBuyCount(CountId id, int count) {
         if (!countMap.containsKey(id)) {
@@ -112,38 +121,48 @@ public class CountManager implements Serializable {
         }
         if (!id.isUpperLimited()) {
             countMap.get(id).max += count;
-//            if (id.isSync() && player != null) {
-//                PacketSendUtility.sendPacket(player, new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max)));
-//            }
+            if (id.isSync() && player != null) {
+                SM_COUNT_SYNC sm_count_sync = PacketManagement.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+                sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                player.sendPacket(sm_count_sync);
+            }
             return true;
         } else {
             countMap.get(id).max += count;
             countMap.get(id).cur += count;
-//            if (id.isSync() && player != null) {
-//                PacketSendUtility.sendPacket(player, new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max)));
-//            }
+            if (id.isSync() && player != null) {
+                SM_COUNT_SYNC sm_count_sync = PacketManagement.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+                sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                player.sendPacket(sm_count_sync);
+            }
             return true;
         }
     }
 
     /**
-     * 增加一个计数
-     * 
-     * @param id 
+     * 增加一个计数（累加模式）
+     *
+     * @param id
      */
     public void addCount(CountId id) {
         if (!id.isUpperLimited()) {
             if (notFull(id)) {
                 countMap.get(id).cur += 1;
-//                if (id.isSync() && player != null) {
-//                    PacketSendUtility.sendPacket(player, new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max)));
-//                }
-            } else {
-                log.error("企图消耗一种错误的Count " + id.value());
+                if (id.isSync() && player != null) {
+                    SM_COUNT_SYNC sm_count_sync = PacketManagement.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+                    sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                    player.sendPacket(sm_count_sync);
+                }
             }
         }
     }
 
+    /**
+     * 获得最大次数（扣除模式）
+     *
+     * @param id
+     * @return
+     */
     public int getMaxCount(CountId id) {
         if (id.isUpperLimited()) {
             if (countMap.containsKey(id)) {
@@ -151,12 +170,16 @@ public class CountManager implements Serializable {
             } else {
                 log.error("企图测试一种不存在的Count " + id.value());
             }
-
-            return 0;
         }
         return 0;
     }
 
+    /**
+     * 获得剩余的次数（扣除模式）
+     *
+     * @param id
+     * @return
+     */
     public int getCount(CountId id) {
         if (id.isUpperLimited()) {
             if (countMap.containsKey(id)) {
@@ -164,21 +187,25 @@ public class CountManager implements Serializable {
             } else {
                 log.error("企图测试一种不存在的Count " + id.value());
             }
-
-            return 0;
         }
         return 0;
     }
 
+    /**
+     * 获得计数信息
+     *
+     * @param id
+     * @return
+     */
     public CountInfo getCountInfo(CountId id) {
         return countMap.containsKey(id) ? countMap.get(id) : null;
     }
 
     /**
-     * 是否还有计数可以消耗
-     * 
+     * 是否还有计数可以消耗（扣除模式）
+     *
      * @param id
-     * @return 
+     * @return
      */
     public boolean hasCount(CountId id) {
         if (id.isUpperLimited()) {
@@ -190,11 +217,17 @@ public class CountManager implements Serializable {
             } else {
                 log.error("企图测试一种不存在的Count " + id.value());
             }
-            return false;
-        } 
+        }
+
         return false;
     }
 
+    /**
+     * 测试的计数，是否充满（累加模式）
+     *
+     * @param id
+     * @return
+     */
     public boolean notFull(CountId id) {
         if (!id.isUpperLimited()) {
             if (countMap.containsKey(id)) {
@@ -207,73 +240,5 @@ public class CountManager implements Serializable {
             }
         }
         return false;
-    }
-
-    static int VERSION = 0;
-
-    public int save(ByteBuffer buf) {
-        try {
-            buf.clear();
-            // 压入版本号
-            buf.putInt(VERSION);
-            buf.putInt(countMap.size());
-
-            Iterator<CountId> it = countMap.keySet().iterator();
-            while (it.hasNext()) {
-                CountId countid = it.next();
-                CountInfo info = countMap.get(countid);
-
-                if (countid.isSave()) {
-                    buf.putInt(countid.value());
-                    buf.putInt(info.cur);
-                    buf.putInt(info.max);
-                }
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return buf.position();
-    }
-
-    public void load(ByteBuffer buf) {
-        try {
-            int version = buf.getInt();
-
-            switch (version) {
-                case 0:
-                    load_version0(buf);
-                    break;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void load_version0(ByteBuffer buf) {
-        int count = buf.getInt();
-
-        for (int i = 0; i < count; ++i) {
-            CountId countid = CountId.fromInt(buf.getInt());
-            int cur = buf.getInt();
-            int max = buf.getInt();
-
-            if (countid == CountId.ENTER_PVP_TIMES) {
-                if (max > 3000 || cur > 3000) {
-                    // 不可能，临时修
-                    max = 10;
-                    cur = 10;
-                }
-            } else if (countid == CountId.CONTIUNE_LOGIN_REWORD) {
-                max = Short.MAX_VALUE;
-            } else if (countid == CountId.GOLDMEONY2MONEY) {
-                if (max > 200 || cur > 200) {
-                    max = 100;
-                    cur = 100;
-                }
-            }
-            countMap.put(countid, new CountInfo(cur, max));
-        }
     }
 }
