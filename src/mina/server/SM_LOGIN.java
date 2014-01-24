@@ -25,19 +25,17 @@ public class SM_LOGIN extends BaseServerPacket {
 
     @Override
     public void perform() {
-        SM_COOLDOWN sm_cooldown = PacketManager.getPacketByOpcode(PacketKind.SM_COOLDOWN.getOpcode());
-        sm_cooldown.init(this.player);
-        SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
-        sm_count_sync.init(this.player);
-        ioSession.write(sm_cooldown);
-        ioSession.write(sm_count_sync);
+        if (flag == 1) {
+            SM_COOLDOWN sm_cooldown = PacketManager.getPacketByOpcode(PacketKind.SM_COOLDOWN.getOpcode());
+            sm_cooldown.init(this.player);
+            SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+            sm_count_sync.init(this.player);
+            ioSession.write(sm_cooldown);
+            ioSession.write(sm_count_sync);
+        }
     }
-    
+
     public void init(int flag) {
         this.flag = flag;
-    }
-    
-    public void initContext() {
-        
     }
 }

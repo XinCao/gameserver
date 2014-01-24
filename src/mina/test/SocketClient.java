@@ -60,16 +60,10 @@ public class SocketClient {
                 outputByteBuffer.clear();
             }
             if (inputStream.read(inputByteBuffer.array()) > 0) {
-                String s = "";
                 inputByteBuffer.position(0);
                 int inputOpcode = inputByteBuffer.getShort();
                 int size = inputByteBuffer.getInt();
-                
-                for (int i = 0; i < size; i++) {
-                    char c = inputByteBuffer.getChar();
-                    s += c;
-                }
-                System.out.println(inputOpcode + "\t" + size + "\t" + s);
+                System.out.println(inputOpcode + "\t" + size + "\t" + inputByteBuffer.getInt());
                 inputByteBuffer.clear();
             }
         }
