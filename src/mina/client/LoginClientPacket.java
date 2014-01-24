@@ -1,7 +1,7 @@
 package mina.client;
 
 import java.nio.ByteBuffer;
-import entity.Player;
+import gameserver.entity.Player;
 import mina.core.BaseClientPacket;
 import mina.core.PacketKind;
 import mina.core.PacketManagement;
@@ -35,6 +35,7 @@ public class LoginClientPacket extends BaseClientPacket {
             Player player = new Player();
             player.setLoginOk(true);
             ioSession.setAttribute("currentPlayer", player);
+            player.setIoSession(ioSession);
         }
         Player currentPlayer = (Player) (ioSession.getAttribute("currentPlayer"));
         String flag = "failure";

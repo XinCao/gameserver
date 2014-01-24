@@ -17,9 +17,9 @@ public class ProtocolEncoder implements MessageEncoder<BaseServerPacket> {
 //        int curPostion = ioBuffer.position();
 //        serverMessage.write(ioBuffer);
 //        int length = ioBuffer.position() - curPostion;
-//        ioBuffer.position(4);
+//        ioBuffer.position(2);
 //        ioBuffer.putInt(length);
-//        ioBuffer.position();
+//        ioBuffer.position(0);
 //        byte[] b = Arrays.copyOfRange(ioBuffer.array(), ioBuffer.arrayOffset(), length + 6);
 //        output.write(b);
 //        output.flush();

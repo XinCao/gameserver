@@ -9,19 +9,12 @@ import org.apache.mina.filter.executor.ExecutorFilter;
 import org.apache.mina.filter.executor.OrderedThreadPoolExecutor;
 import org.apache.mina.transport.socket.DefaultSocketSessionConfig;
 import org.apache.mina.transport.socket.nio.NioSocketAcceptor;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
  *
  * @author caoxin
  */
 public class NioServer {
-
-    public static void main(String... args) throws IOException {
-        ApplicationContext ac = new FileSystemXmlApplicationContext("./config/app.xml");
-        startServer();
-    }
 
     public static void startServer() throws IOException {
         NioSocketAcceptor acceptor = new NioSocketAcceptor();

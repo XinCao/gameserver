@@ -26,7 +26,7 @@ public class SocketClient {
             System.out.println("use : {ip}, {port}, {opcode} if {ip} is null or {*} default '127.0.0.1'");
             System.exit(1);
         }
-        if (length == 0) {
+        if (length > 0 && cmd[0].equals("default")) {
             ip = "127.0.0.1";
             port = 8000;
             opcode = 1;
@@ -42,8 +42,8 @@ public class SocketClient {
         Socket socket = new Socket(ip, port);
         OutputStream outputStream = socket.getOutputStream();
         ByteBuffer outputByteBuffer = ByteBuffer.allocate(256);
+         String outputStr;
         InputStream inputStream = socket.getInputStream();
-        String outputStr;
         ByteBuffer inputByteBuffer = ByteBuffer.allocate(256);
         while (true) {
             if ((outputStr = outBufferedReader.readLine()) != null) {
@@ -63,12 +63,13 @@ public class SocketClient {
                 String s = "";
                 inputByteBuffer.position(0);
                 int inputOpcode = inputByteBuffer.getShort();
-                int inputLen = inputByteBuffer.getInt();
-                for (int i = 0; i < inputLen; i++) {
+                int size = inputByteBuffer.getInt();
+                
+                for (int i = 0; i < size; i++) {
                     char c = inputByteBuffer.getChar();
                     s += c;
                 }
-                System.out.println(inputOpcode + "\t" + inputLen + "\t" + s);
+                System.out.println(inputOpcode + "\t" + size + "\t" + s);
                 inputByteBuffer.clear();
             }
         }

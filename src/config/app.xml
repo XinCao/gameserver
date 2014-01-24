@@ -25,4 +25,5 @@
   </bean>
   
   <bean id="packetManagement" class="mina.core.PacketManagement"></bean>
+  <import resource="mybatis.xml"/>
 </beans>

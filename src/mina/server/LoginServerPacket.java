@@ -12,7 +12,9 @@ public class LoginServerPacket extends BaseServerPacket {
     @Override
     protected void writeImp(IoBuffer ioBuffer) {
         String str = "hello world!";
-        for (int i = 0; i < str.length(); i++) {
+        int len = str.length();
+        ioBuffer.putInt(len);
+        for (int i = 0; i < len; i++) {
             ioBuffer.putChar(str.charAt(i));
         }
         logger.debug(str);

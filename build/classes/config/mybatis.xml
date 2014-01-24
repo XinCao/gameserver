@@ -90,14 +90,6 @@
             <value>config/mybatis/mybatis-config.xml</value>
         </property>
     </bean>
-    <bean id="userMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
-        <property name="mapperInterface">
-            <value>dao.UserMapper</value>
-        </property>
-        <property name="sqlSessionFactory">
-            <ref bean="sqlSessionFactory"/>
-        </property>
-    </bean>
     <bean id="itemLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
         <property name="mapperInterface">
             <value>dao.ItemLogMapper</value>
