@@ -1,7 +1,7 @@
 package mina;
 
 import mina.core.BaseClientPacket;
-import mina.core.PacketManagement;
+import mina.core.PacketManager;
 import org.apache.mina.core.buffer.IoBuffer;
 import org.apache.mina.core.session.IoSession;
 import org.apache.mina.filter.codec.ProtocolDecoderOutput;
@@ -55,7 +55,7 @@ public class ProtocolDecoder implements MessageDecoder {
     public MessageDecoderResult decode(IoSession ioSession, IoBuffer in, ProtocolDecoderOutput out) throws Exception {
         short opcode = in.getShort();
         in.getInt();
-        BaseClientPacket clientPacket = PacketManagement.getPacketByOpcode(opcode);
+        BaseClientPacket clientPacket = PacketManager.getPacketByOpcode(opcode);
         if (clientPacket == null) {
             return MessageDecoderResult.NOT_OK;
         }

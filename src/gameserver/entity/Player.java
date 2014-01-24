@@ -11,9 +11,23 @@ import org.apache.mina.core.session.IoSession;
  */
 public class Player {
 
+    private String key;
     private IoSession ioSession;
     private CoolDownManager coolManager;
     private CountManager countManager;
+
+    public Player() {
+        this.coolManager = new CoolDownManager(this);
+        this.countManager = new CountManager(this);
+    }
+
+    public String getKey() {
+        return key;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 
     public IoSession getIoSession() {
         return ioSession;

@@ -24,6 +24,6 @@
     <property name="properties" ref="systemConfigProperties" />
   </bean>
   
-  <bean id="packetManagement" class="mina.core.PacketManagement"></bean>
+  <bean id="packetManager" class="mina.core.PacketManager"></bean>
   <import resource="mybatis.xml"/>
 </beans>

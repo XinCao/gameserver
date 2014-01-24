@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.Map;
 import javolution.util.FastMap;
 import mina.core.PacketKind;
-import mina.core.PacketManagement;
+import mina.core.PacketManager;
 import mina.server.SM_COUNT_SYNC;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -82,7 +82,7 @@ public class CountManager {
     public void setCount(CountId id, int cur) {
         CountInfo ci = countMap.get(id);
         ci.cur = cur;
-        SM_COUNT_SYNC sm_count_sync = PacketManagement.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+        SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
         sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
         player.sendPacket(sm_count_sync);
     }
@@ -97,7 +97,7 @@ public class CountManager {
             if (hasCount(id)) {
                 countMap.get(id).cur -= 1;
                 if (id.isSync() && player != null) {
-                    SM_COUNT_SYNC sm_count_sync = PacketManagement.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+                    SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
                     sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
                     player.sendPacket(sm_count_sync);
                 }
@@ -122,7 +122,7 @@ public class CountManager {
         if (!id.isUpperLimited()) {
             countMap.get(id).max += count;
             if (id.isSync() && player != null) {
-                SM_COUNT_SYNC sm_count_sync = PacketManagement.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+                SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
                 sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
                 player.sendPacket(sm_count_sync);
             }
@@ -131,7 +131,7 @@ public class CountManager {
             countMap.get(id).max += count;
             countMap.get(id).cur += count;
             if (id.isSync() && player != null) {
-                SM_COUNT_SYNC sm_count_sync = PacketManagement.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+                SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
                 sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
                 player.sendPacket(sm_count_sync);
             }
@@ -149,7 +149,7 @@ public class CountManager {
             if (notFull(id)) {
                 countMap.get(id).cur += 1;
                 if (id.isSync() && player != null) {
-                    SM_COUNT_SYNC sm_count_sync = PacketManagement.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
+                    SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
                     sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
                     player.sendPacket(sm_count_sync);
                 }

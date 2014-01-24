@@ -2,7 +2,7 @@ package mina;
 
 import mina.core.BaseClientPacket;
 import mina.core.PacketKind;
-import mina.core.PacketManagement;
+import mina.core.PacketManager;
 import mina.core.BaseServerPacket;
 import org.apache.mina.core.service.IoHandlerAdapter;
 import org.apache.mina.core.session.IdleStatus;
@@ -41,6 +41,7 @@ public class PacketHandler extends IoHandlerAdapter {
     @Override
     public void messageSent(IoSession session, Object object) throws Exception {
         BaseServerPacket serverPacket = (BaseServerPacket)object;
+        serverPacket.setIoSession(session);
         if (serverPacket.canPerform()) {
             serverPacket.perform();
         }
@@ -72,7 +73,7 @@ public class PacketHandler extends IoHandlerAdapter {
      */
     @Override
     public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
-        session.write(PacketManagement.getPacketByOpcode(PacketKind.SM_IDEL.getOpcode()));
+        session.write(PacketManager.getPacketByOpcode(PacketKind.SM_IDEL.getOpcode()));
         super.sessionIdle(session, status);
     }
 

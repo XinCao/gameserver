@@ -8,13 +8,13 @@ import org.springframework.context.ApplicationContextAware;
  *
  * @author caoxin
  */
-public class PacketManagement implements ApplicationContextAware {
+public class PacketManager implements ApplicationContextAware {
 
     private static ApplicationContext ac;
 
     @Override
     public void setApplicationContext(ApplicationContext ac) throws BeansException {
-        PacketManagement.ac = ac;
+        PacketManager.ac = ac;
     }
 
     public static <T extends BasePacket> T getPacketByOpcode(short opcode) {

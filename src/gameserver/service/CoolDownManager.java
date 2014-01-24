@@ -5,7 +5,7 @@ import gameserver.entity.IntPair;
 import gameserver.entity.Player;
 import javolution.util.FastMap;
 import mina.core.PacketKind;
-import mina.core.PacketManagement;
+import mina.core.PacketManager;
 import mina.server.SM_COOLDOWN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +16,9 @@ import org.slf4j.LoggerFactory;
  */
 public class CoolDownManager {
 
-    private static Logger log = LoggerFactory.getLogger(CoolDownManager.class);
-    private FastMap<CoolDownId, Integer> coolmap = new FastMap<CoolDownId, Integer>().shared();
-    private final Player player;
+    private static Logger logger = LoggerFactory.getLogger(CoolDownManager.class);
+    private FastMap<CoolDownId, Integer> coolmap = new FastMap<CoolDownId, Integer>();
+    private final Player onwer;
     private long longCDOperator = 0L;
     private long shortCDOperator = 0L;
 
@@ -26,8 +26,8 @@ public class CoolDownManager {
         return coolmap;
     }
 
-    public CoolDownManager(Player player) {
-        this.player = player;
+    public CoolDownManager(Player onwer) {
+        this.onwer = onwer;
     }
 
     /**
@@ -37,18 +37,18 @@ public class CoolDownManager {
      * @param coolid
      * @param cooltime
      */
-    public void setCoolDown(Player player, CoolDownId coolid, int cooltime) {
+    public void setCoolDown(CoolDownId coolid, int cooltime) {
         coolmap.put(coolid, GameTime.getInstance().currentTimeSecond() + cooltime);
-        if (coolid.isSync() && player != null) {
-            SM_COOLDOWN cooldown = PacketManagement.getPacketByOpcode(PacketKind.SM_COOLDOWN.getOpcode());
-            cooldown.init(player, new IntPair(coolid.value(), player.getCoolManager().getCoolDown(coolid)));
-            player.sendPacket(cooldown);
+        if (coolid.isSync() && onwer != null) {
+            SM_COOLDOWN sm_cooldown = PacketManager.getPacketByOpcode(PacketKind.SM_COOLDOWN.getOpcode());
+            sm_cooldown.init(this.onwer, new IntPair(coolid.value(), onwer.getCoolManager().getCoolDown(coolid)));
+            onwer.sendPacket(sm_cooldown);
         }
     }
 
     public int getCoolDown(CoolDownId coolid) {
         if (!coolmap.containsKey(coolid)) {
-            setCoolDown(player, coolid, 0);
+            setCoolDown(coolid, 0);
         }
         return coolmap.get(coolid);
     }
@@ -66,8 +66,8 @@ public class CoolDownManager {
             }
             return true;
         } else {
-            setCoolDown(player, coolid, 0);
-            log.debug("企图测试一种不存在的CoolDown: name={}, id={}", coolid, coolid.value());
+            setCoolDown(coolid, 0);
+            logger.debug("企图测试一种不存在的CoolDown: name={}, id={}", coolid, coolid.value());
             return false;
         }
     }
@@ -78,8 +78,8 @@ public class CoolDownManager {
      * @param player
      * @param coolid
      */
-    public void clearCoolDown(Player player, CoolDownId coolid) {
-        setCoolDown(player, coolid, 0);
+    public void clearCoolDown(CoolDownId coolid) {
+        setCoolDown(coolid, 0);
     }
 
     public boolean checkCommonProtocolCD() {

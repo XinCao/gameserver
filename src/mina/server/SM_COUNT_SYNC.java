@@ -22,6 +22,12 @@ public class SM_COUNT_SYNC extends BaseServerPacket {
 
     @Override
     protected void writeImp(IoBuffer ioBuffer) {
+        ioBuffer.putInt(cds.size());
+        for(Int3 ip : cds) {
+            ioBuffer.putInt(ip.param1());
+            ioBuffer.putInt(ip.param2());
+            ioBuffer.putInt(ip.param3());
+        }
     }
 
     @Override
@@ -33,6 +39,9 @@ public class SM_COUNT_SYNC extends BaseServerPacket {
     }
 
     public void init(Player player) {
+        if (player == null) {
+            return;
+        }
         cds = new ArrayList<Int3>();
         Map<CountId, CountManager.CountInfo> countmap = player.getCountManager().getCountMap();
         Iterator<CountId> it = countmap.keySet().iterator();

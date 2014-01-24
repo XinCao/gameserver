@@ -1,5 +1,6 @@
 package mina.core;
 
+import gameserver.entity.Player;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +18,7 @@ public abstract class BasePacket implements Cloneable {
     private PacketType packetType;
     private Status status;
     protected IoSession ioSession;
+    protected Player player;
 
     public void setAc(ApplicationContext ac) {
         this.ac = ac;
@@ -63,5 +65,11 @@ public abstract class BasePacket implements Cloneable {
 
     public void setIoSession(IoSession ioSession) {
         this.ioSession = ioSession;
+        if (ioSession != null) {
+            Object o = ioSession.getAttribute("currentPlayer");
+            if (o != null) {
+                this.player = (Player)o;
+            }
+        }
     }
 }

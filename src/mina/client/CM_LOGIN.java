@@ -2,9 +2,12 @@ package mina.client;
 
 import java.nio.ByteBuffer;
 import gameserver.entity.Player;
+import gameserver.service.PlayerService;
+import gameserver.entity.World;
 import mina.core.BaseClientPacket;
 import mina.core.PacketKind;
-import mina.core.PacketManagement;
+import mina.core.PacketManager;
+import mina.server.SM_LOGIN;
 
 /**
  *
@@ -12,7 +15,8 @@ import mina.core.PacketManagement;
  */
 public class CM_LOGIN extends BaseClientPacket {
 
-    private String str;
+    private String key;
+    private PlayerService playerService;
 
     @Override
     protected void readImp(ByteBuffer byteBuffer) {
@@ -21,7 +25,7 @@ public class CM_LOGIN extends BaseClientPacket {
         for (int i = 0; i < lenght; i++) {
             sb.append((char) (byteBuffer.get()));
         }
-        this.str = sb.toString();
+        this.key = sb.toString();
     }
 
     @Override
@@ -31,12 +35,23 @@ public class CM_LOGIN extends BaseClientPacket {
 
     @Override
     public void perform() {
-        if (true) {
-            Player player = new Player();
-            ioSession.setAttribute("currentPlayer", player);
-            player.setIoSession(ioSession);
+        this.initContext();
+        SM_LOGIN sm_login = PacketManager.getPacketByOpcode(PacketKind.SM_LOGIN.getOpcode());
+        if (key.equals("caoxin")) {
+            this.player = new Player();
+            this.player.setKey(this.key);
+            this.player.setIoSession(ioSession);
+            this.playerService.initPlayer(this.player);
+            World.joinWorld(player);
+            this.ioSession.setAttribute("currentPlayer", player);
+            sm_login.init(1);
+        } else {
+            sm_login.init(-1);
         }
-        System.out.println(this.str);
-        this.ioSession.write(PacketManagement.getPacketByOpcode(PacketKind.SM_LOGIN.getOpcode()));
+        this.ioSession.write(sm_login);
+    }
+
+    public void initContext() {
+        playerService = ac.getBean(PlayerService.class);
     }
 }

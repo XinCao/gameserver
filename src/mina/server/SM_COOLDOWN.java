@@ -36,6 +36,9 @@ public class SM_COOLDOWN extends BaseServerPacket {
     }
 
     public void init(Player player) {
+        if (player == null) {
+            return;
+        }
         cds = new ArrayList<IntPair>();
         FastMap<CoolDownId, Integer> coolmap = player.getCoolManager().getCoolMap();
         Iterator<CoolDownId> it = coolmap.keySet().iterator();
