@@ -1,7 +1,7 @@
 package gameserver;
 
 import java.io.IOException;
-import mina.NioServer;
+import gameserver.network.NioServer;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 

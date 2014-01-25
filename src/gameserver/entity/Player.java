@@ -2,7 +2,7 @@ package gameserver.entity;
 
 import gameserver.service.CoolDownManager;
 import gameserver.service.CountManager;
-import mina.core.BaseServerPacket;
+import gameserver.network.core.BaseServerPacket;
 import org.apache.mina.core.session.IoSession;
 
 /**

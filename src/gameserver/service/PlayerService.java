@@ -1,6 +1,6 @@
 package gameserver.service;
 
-import dao.PlayerMapper;
+import gameserver.dao.PlayerMapper;
 import gameserver.entity.Player;
 import org.springframework.beans.factory.annotation.Autowired;
 

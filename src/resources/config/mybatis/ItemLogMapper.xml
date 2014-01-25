@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="gameserver.dao.ItemLogMapper">
+    <select id="selectItemLog" parameterType="int" resultType="gameserver.dao.model.ItemLog">
+        SELECT player_id, action, item_tpl_id, amount, channel, extra_data FROM item_log WHERE player_id=#{playerId}
+    </select>
+    <insert id="insertItemLog" parameterType="gameserver.dao.model.ItemLog" flushCache="true">
+        INSERT INTO item_log (player_id, action, item_tpl_id, amount, channel, extra_data) VALUES (#{playerId}, #{action}, #{itemTplId}, #{amount}, #{channel}, #{extraData})
+    </insert>
+    <update id="updateItemLog" parameterType="gameserver.dao.model.ItemLog">
+        UPDATE item_log SET player_id=#{playerId}, action=#{action}, item_tpl_id=#{itemTplId}, amount=#{amount}, channel=#{channel}, extra_data=#{extraData} WHERE player_id=#{playerId}
+    </update>
+    <delete id="deleteItemLog" parameterType="int">
+        DELETE FROM item_log WHERE player_id=#{playerId}
+    </delete>
+</mapper>

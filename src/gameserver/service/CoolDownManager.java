@@ -4,9 +4,9 @@ import gameserver.config.PlayerConfig;
 import gameserver.entity.IntPair;
 import gameserver.entity.Player;
 import javolution.util.FastMap;
-import mina.core.PacketKind;
-import mina.core.PacketManager;
-import mina.server.SM_COOLDOWN;
+import gameserver.network.core.PacketKind;
+import gameserver.network.core.PacketManager;
+import gameserver.network.server.SM_COOLDOWN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
