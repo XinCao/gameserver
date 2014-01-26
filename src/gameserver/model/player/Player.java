@@ -1,4 +1,4 @@
-package gameserver.model;
+package gameserver.model.player;
 
 import gameserver.service.CoolDownManager;
 import gameserver.service.CountManager;

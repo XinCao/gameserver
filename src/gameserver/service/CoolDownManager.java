@@ -2,7 +2,7 @@ package gameserver.service;
 
 import gameserver.config.PlayerConfig;
 import gameserver.model.IntPair;
-import gameserver.model.Player;
+import gameserver.model.player.Player;
 import javolution.util.FastMap;
 import gameserver.network.core.PacketKind;
 import gameserver.network.core.PacketManager;

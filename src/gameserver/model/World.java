@@ -1,5 +1,6 @@
 package gameserver.model;
 
+import gameserver.model.player.Player;
 import java.util.Map;
 import javolution.util.FastMap;
 

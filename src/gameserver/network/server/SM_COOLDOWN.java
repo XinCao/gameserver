@@ -1,7 +1,7 @@
 package gameserver.network.server;
 
 import gameserver.model.IntPair;
-import gameserver.model.Player;
+import gameserver.model.player.Player;
 import gameserver.service.CoolDownId;
 import gameserver.service.GameTime;
 import java.util.ArrayList;

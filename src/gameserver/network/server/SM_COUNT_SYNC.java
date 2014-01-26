@@ -1,7 +1,7 @@
 package gameserver.network.server;
 
 import gameserver.model.Int3;
-import gameserver.model.Player;
+import gameserver.model.player.Player;
 import gameserver.service.CountId;
 import gameserver.service.CountManager;
 import java.util.ArrayList;

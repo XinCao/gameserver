@@ -1,6 +1,6 @@
 package gameserver.network.core;
 
-import gameserver.model.Player;
+import gameserver.model.player.Player;
 import org.apache.mina.core.session.IoSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
