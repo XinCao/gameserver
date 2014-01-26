@@ -1,9 +1,9 @@
 package gameserver.network.client;
 
 import java.nio.ByteBuffer;
-import gameserver.entity.Player;
 import gameserver.service.PlayerService;
-import gameserver.entity.World;
+import gameserver.model.Player;
+import gameserver.model.World;
 import gameserver.network.core.BaseClientPacket;
 import gameserver.network.core.PacketKind;
 import gameserver.network.core.PacketManager;

@@ -1,6 +1,6 @@
 package gameserver.dao;
 
-import gameserver.dao.model.ItemLog;
+import gameserver.model.ItemLog;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 

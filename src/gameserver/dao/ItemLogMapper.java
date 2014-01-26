@@ -1,6 +1,6 @@
 package gameserver.dao;
 
-import gameserver.dao.model.ItemLog;
+import gameserver.model.ItemLog;
 import java.util.List;
 
 /**

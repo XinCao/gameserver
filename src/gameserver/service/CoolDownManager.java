@@ -1,8 +1,8 @@
 package gameserver.service;
 
 import gameserver.config.PlayerConfig;
-import gameserver.entity.IntPair;
-import gameserver.entity.Player;
+import gameserver.model.IntPair;
+import gameserver.model.Player;
 import javolution.util.FastMap;
 import gameserver.network.core.PacketKind;
 import gameserver.network.core.PacketManager;

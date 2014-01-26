@@ -1,4 +1,4 @@
-package gameserver.dao.model;
+package gameserver.model;
 
 /**
  *

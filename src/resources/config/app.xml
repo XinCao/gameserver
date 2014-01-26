@@ -23,5 +23,17 @@
   <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
     <property name="properties" ref="systemConfigProperties" />
   </bean>
-  
+  <import resource="action.xml" />
+  <import resource="aop.xml" />
+  <import resource="core.xml" />
+  <import resource="event_listener.xml" />
+  <import resource="groovy_script.xml" />
+  <import resource="jmx.xml" />
+  <import resource="log_config.xml" />
+  <import resource="log_config.xml" />
+  <import resource="memcached.xml" />
+  <import resource="message_source_bundle.xml" />
+  <import resource="mybatis.xml" />
+  <import resource="property_editor.xml" />
+  <import resource="service.xml" />
 </beans>

@@ -1,4 +1,6 @@
-package gameserver.util;
+package gameserver.model;
+
+import gameserver.util.Weight;
 
 /**
  *

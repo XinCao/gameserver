@@ -1,4 +1,4 @@
-package gameserver.entity;
+package gameserver.model;
 
 import java.util.Map;
 import javolution.util.FastMap;

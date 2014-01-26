@@ -1,7 +1,7 @@
 package gameserver.log;
 
 import gameserver.dao.ItemLogMapper;
-import gameserver.dao.model.ItemLog;
+import gameserver.model.ItemLog;
 
 /**
  *
