@@ -9,5 +9,11 @@
             </source-roots>
             <test-roots/>
         </data>
+        <spring-data xmlns="http://www.netbeans.org/ns/spring-data/1">
+            <config-files>
+                <config-file>src/resources/config/table.xml</config-file>
+            </config-files>
+            <config-file-groups/>
+        </spring-data>
     </configuration>
 </project>

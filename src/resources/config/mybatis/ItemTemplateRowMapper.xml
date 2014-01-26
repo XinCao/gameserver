@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="gameserver.dao.core.tab.ItemTemplateRowMapper">
+    <resultMap type="ItemTemplateRow" id="itemTemplateRowMap">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="isEquip" column="is_equip"/>
+    </resultMap>   
+    <select id="loadTableRow" resultType="itemTemplateRowMap">
+        SELECT id, name, is_equip FROM item_template ORDER BY id
+    </select>
+</mapper>
