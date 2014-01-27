@@ -4,6 +4,7 @@
     "http://mybatis.org/dtd/mybatis-3-config.dtd">  
 <configuration>
     <mappers>
-        <mapper resource="resources/config/mybatis/ItemLogMapper.xml"/>
+        <mapper resource="resources/config/mybatis/ItemLogMapper.xml" />
+        <mapper resource="resources/config/mybatis/ItemTemplateRowMapper.xml" />
     </mappers>
 </configuration>

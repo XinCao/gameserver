@@ -1,7 +1,6 @@
 package gameserver.dao.core.tab;
 
-import gameserver.service.TableService;
-import java.util.Map;
+import java.util.List;
 
 /**
  * 加载游戏配置表
@@ -10,6 +9,5 @@ import java.util.Map;
  */
 public interface TableRowMapper<T extends BaseTableRow> {
 
-    public Map<Integer, T> loadTableRow();
-    public TableService.TableKind getTableKind();
+    public List<T> loadTableRow();
 }

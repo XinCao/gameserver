@@ -8,7 +8,7 @@ public class ItemTemplateRow extends BaseTableRow {
 
     private int id;
     private String name;
-    private boolean isEquip;
+    private int isEquip;
 
     @Override
     public int getId() {
@@ -27,11 +27,11 @@ public class ItemTemplateRow extends BaseTableRow {
         this.name = name;
     }
 
-    public boolean isIsEquip() {
-        return isEquip;
+    public boolean isEquip() {
+        return isEquip == 1;
     }
 
-    public void setIsEquip(boolean isEquip) {
+    public void setIsEquip(int isEquip) {
         this.isEquip = isEquip;
     }
 }

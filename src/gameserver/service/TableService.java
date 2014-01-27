@@ -11,18 +11,17 @@ import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.BeansException;
-import org.springframework.beans.factory.config.BeanPostProcessor;
 
 /**
  *
  * @author caoxin
  */
-public class TableService implements BeanPostProcessor {
+public class TableService {
 
     private static final Logger logger = LoggerFactory.getLogger(TableService.class);
     private static final Map<TableKind, Table<? extends BaseTableRow>> kindAndTable = new EnumMap<TableKind, Table<? extends BaseTableRow>>(TableKind.class);
-    private static final Map<TableKind, TableRowMapper<? extends BaseTableRow>> kindAndDAO = new EnumMap<TableKind, TableRowMapper<? extends BaseTableRow>>(TableKind.class);
+    private Map<TableKind, TableRowMapper<? extends BaseTableRow>> kindAndDAO;
+    public TableKind getTable;
 
     public static enum TableKind {
 
@@ -41,6 +40,16 @@ public class TableService implements BeanPostProcessor {
         public String getName() {
             return name;
         }
+
+        public static TableKind getTableKindByName(String name) {
+            for (TableKind k : values()) {
+                if (k.getName().equals(name)) {
+                    return k;
+                }
+            }
+            logger.debug("this name = {} table is not found!", name);
+            return null;
+        }
     }
 
     /**
@@ -49,8 +58,10 @@ public class TableService implements BeanPostProcessor {
      * @param tableKind
      */
     public void loadTableByKind(TableKind tableKind) {
-        if (kindAndTable.containsKey(tableKind) && kindAndDAO.containsKey(tableKind)) {
-            kindAndTable.get(tableKind).setTable(kindAndDAO.get(tableKind).loadTableRow());
+        if (!kindAndTable.containsKey(tableKind) && kindAndDAO.containsKey(tableKind)) {
+            Table<BaseTableRow> table = new Table(tableKind);
+            kindAndTable.put(tableKind, table);
+            table.setTable(kindAndDAO.get(tableKind).loadTableRow());
         } else {
             logger.error("this kind = {} table is not found!, Maybe, you don't have it", tableKind.getName());
         }
@@ -80,19 +91,7 @@ public class TableService implements BeanPostProcessor {
         return null;
     }
 
-    @Override
-    public Object postProcessBeforeInitialization(Object o, String string) throws BeansException {
-        return o;
-    }
-
-    @Override
-    public Object postProcessAfterInitialization(Object o, String string) throws BeansException {
-        TableRowMapper tableRowMapper = null;
-        if (TableRowMapper.class.isAssignableFrom(o.getClass())) {
-            tableRowMapper = (TableRowMapper) o;
-            kindAndDAO.put(tableRowMapper.getTableKind(), tableRowMapper);
-        }
-
-        return tableRowMapper;
+    public void setKindAndDAO(Map<TableKind, TableRowMapper<? extends BaseTableRow>> kindAndDAO) {
+        this.kindAndDAO = kindAndDAO;
     }
 }

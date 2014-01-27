@@ -1,6 +1,8 @@
 package gameserver.dao.core.tab;
 
 import gameserver.service.TableService.TableKind;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +33,15 @@ public class Table<T extends BaseTableRow> {
         this.table.clear();
     }
 
-    public void setTable(Map<Integer, ? extends BaseTableRow> table) {
-        this.table = (Map<Integer, T>) table;
+    public void setTable(List<? extends BaseTableRow> list) {
+        this.table = this.listToMap(list);
+    }
+    
+    private Map<Integer, T> listToMap(List<? extends BaseTableRow> list) {
+        Map<Integer, T> table = new HashMap<Integer, T>();
+        for (BaseTableRow b : list) {
+            table.put(b.getId(), (T)b);
+        }
+        return table;
     }
 }

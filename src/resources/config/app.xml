@@ -36,4 +36,5 @@
   <import resource="mybatis.xml" />
   <import resource="property_editor.xml" />
   <import resource="service.xml" />
+  <import resource="table.xml" />
 </beans>
