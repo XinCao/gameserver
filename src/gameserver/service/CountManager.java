@@ -3,7 +3,6 @@ package gameserver.service;
 import gameserver.model.Int3;
 import gameserver.model.player.Player;
 import java.util.Map;
-import javolution.util.FastMap;
 import gameserver.network.core.PacketKind;
 import gameserver.network.core.PacketManager;
 import gameserver.network.server.SM_COUNT_SYNC;

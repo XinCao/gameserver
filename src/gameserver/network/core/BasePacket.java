@@ -24,12 +24,6 @@ public abstract class BasePacket implements Cloneable {
         this.ac = ac;
     }
 
-    public boolean canPerform() {
-        return true;
-    }
-
-    abstract public void perform();
-
     @Override
     protected Object clone() throws CloneNotSupportedException {
         return super.clone();
@@ -68,7 +62,7 @@ public abstract class BasePacket implements Cloneable {
         if (ioSession != null) {
             Object o = ioSession.getAttribute("currentPlayer");
             if (o != null) {
-                this.player = (Player)o;
+                this.player = (Player) o;
             }
         }
     }

@@ -13,4 +13,10 @@ public abstract class BaseClientPacket extends BasePacket {
     }
 
     abstract protected void readImp(ByteBuffer byteBuffer);
+
+    public boolean canPerform() {
+        return true;
+    }
+
+    abstract public void perform();
 }

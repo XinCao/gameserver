@@ -10,9 +10,4 @@ public class SM_IDEL extends BaseServerPacket {
         ioBuffer.putInt(1);
         ioBuffer.putInt(2);
     }
-
-    @Override
-    public void perform() {
-         logger.debug("a heart beat!");
-    }
 }

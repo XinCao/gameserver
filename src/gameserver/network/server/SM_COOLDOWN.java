@@ -31,10 +31,6 @@ public class SM_COOLDOWN extends BaseServerPacket {
         }
     }
 
-    @Override
-    public void perform() {
-    }
-
     public void init(Player player) {
         if (player == null) {
             return;

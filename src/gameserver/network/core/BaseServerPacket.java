@@ -13,5 +13,4 @@ public abstract class BaseServerPacket extends BasePacket {
     }
 
     abstract protected void writeImp(IoBuffer ioBuffer);
-
 }

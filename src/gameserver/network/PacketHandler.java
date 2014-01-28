@@ -17,14 +17,14 @@ public class PacketHandler extends IoHandlerAdapter {
 
     /**
      * 对接受到的消息进行处理
-     * 
+     *
      * @param session
      * @param object
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public void messageReceived(IoSession session, Object object) throws Exception {
-        BaseClientPacket clientPacket = (BaseClientPacket)object;
+        BaseClientPacket clientPacket = (BaseClientPacket) object;
         if (clientPacket.canPerform()) {
             clientPacket.perform();
         }
@@ -33,26 +33,23 @@ public class PacketHandler extends IoHandlerAdapter {
 
     /**
      * 发送消息给client
-     * 
+     *
      * @param session
      * @param serverMessage
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public void messageSent(IoSession session, Object object) throws Exception {
-        BaseServerPacket serverPacket = (BaseServerPacket)object;
+        BaseServerPacket serverPacket = (BaseServerPacket) object;
         serverPacket.setIoSession(session);
-        if (serverPacket.canPerform()) {
-            serverPacket.perform();
-        }
         super.messageSent(session, serverPacket);
     }
 
     /**
      * 当回话断开时，调用（注意添加离线任务）
-     * 
+     *
      * @param session
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public void sessionClosed(IoSession session) throws Exception {
@@ -66,10 +63,10 @@ public class PacketHandler extends IoHandlerAdapter {
 
     /**
      * 回话空闲超时调用
-     * 
+     *
      * @param session
      * @param status
-     * @throws Exception 
+     * @throws Exception
      */
     @Override
     public void sessionIdle(IoSession session, IdleStatus status) throws Exception {
