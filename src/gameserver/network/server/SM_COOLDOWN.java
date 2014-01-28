@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
-import javolution.util.FastMap;
 import gameserver.network.core.BaseServerPacket;
+import java.util.Map;
 import org.apache.mina.core.buffer.IoBuffer;
 
 /**
@@ -40,7 +40,7 @@ public class SM_COOLDOWN extends BaseServerPacket {
             return;
         }
         cds = new ArrayList<IntPair>();
-        FastMap<CoolDownId, Integer> coolmap = player.getCoolManager().getCoolMap();
+        Map<CoolDownId, Integer> coolmap = player.getCoolManager().getCoolMap();
         Iterator<CoolDownId> it = coolmap.keySet().iterator();
         while (it.hasNext()) {
             CoolDownId id = it.next();

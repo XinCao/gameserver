@@ -7,6 +7,7 @@ import javolution.util.FastMap;
 import gameserver.network.core.PacketKind;
 import gameserver.network.core.PacketManager;
 import gameserver.network.server.SM_COUNT_SYNC;
+import java.util.EnumMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +18,7 @@ import org.slf4j.LoggerFactory;
 public class CountManager {
 
     private static Logger log = LoggerFactory.getLogger(CountManager.class);
-    private FastMap<CountId, CountInfo> countMap = new FastMap<CountId, CountInfo>();
+    private Map<CountId, CountInfo> countMap = new EnumMap<CountId, CountInfo>(CountId.class);
     private final Player player;
 
     /**

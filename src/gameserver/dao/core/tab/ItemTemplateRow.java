@@ -34,4 +34,5 @@ public class ItemTemplateRow extends BaseTableRow {
     public void setIsEquip(int isEquip) {
         this.isEquip = isEquip;
     }
+    
 }

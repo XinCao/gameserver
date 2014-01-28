@@ -21,7 +21,6 @@ public class TableService {
     private static final Logger logger = LoggerFactory.getLogger(TableService.class);
     private static final Map<TableKind, Table<? extends BaseTableRow>> kindAndTable = new EnumMap<TableKind, Table<? extends BaseTableRow>>(TableKind.class);
     private Map<TableKind, TableRowMapper<? extends BaseTableRow>> kindAndDAO;
-    public TableKind getTable;
 
     public static enum TableKind {
 

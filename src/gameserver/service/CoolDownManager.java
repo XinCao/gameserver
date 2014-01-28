@@ -3,10 +3,11 @@ package gameserver.service;
 import gameserver.config.PlayerConfig;
 import gameserver.model.IntPair;
 import gameserver.model.player.Player;
-import javolution.util.FastMap;
 import gameserver.network.core.PacketKind;
 import gameserver.network.core.PacketManager;
 import gameserver.network.server.SM_COOLDOWN;
+import java.util.EnumMap;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,12 +18,12 @@ import org.slf4j.LoggerFactory;
 public class CoolDownManager {
 
     private static Logger logger = LoggerFactory.getLogger(CoolDownManager.class);
-    private FastMap<CoolDownId, Integer> coolmap = new FastMap<CoolDownId, Integer>();
+    private Map<CoolDownId, Integer> coolmap = new EnumMap<CoolDownId, Integer>(CoolDownId.class);
     private final Player onwer;
     private long longCDOperator = 0L;
     private long shortCDOperator = 0L;
 
-    public FastMap<CoolDownId, Integer> getCoolMap() {
+    public Map<CoolDownId, Integer> getCoolMap() {
         return coolmap;
     }
 

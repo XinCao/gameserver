@@ -38,10 +38,10 @@ public class Table<T extends BaseTableRow> {
     }
     
     private Map<Integer, T> listToMap(List<? extends BaseTableRow> list) {
-        Map<Integer, T> table = new HashMap<Integer, T>();
+        Map<Integer, T> t = new HashMap<Integer, T>();
         for (BaseTableRow b : list) {
-            table.put(b.getId(), (T)b);
+            t.put(b.getId(), (T)b);
         }
-        return table;
+        return t;
     }
 }
