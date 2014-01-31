@@ -51,6 +51,7 @@ public class CM_LOGIN extends BaseClientPacket {
         this.ioSession.write(sm_login);
     }
 
+    @Override
     public void initContext() {
         playerService = ac.getBean(PlayerService.class);
     }

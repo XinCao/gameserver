@@ -13,11 +13,11 @@ public enum Status {
     private Status(short value) {
         this.value = value;
     }
-    
+
     public short getValue() {
         return this.value;
     }
-    
+
     public Status getStatus(int value) {
         for (Status s : values()) {
             if (s.getValue() == value) {

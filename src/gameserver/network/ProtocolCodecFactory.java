@@ -8,7 +8,7 @@ import org.apache.mina.filter.codec.demux.MessageEncoder;
 public class ProtocolCodecFactory extends DemuxingProtocolCodecFactory {
 
     public ProtocolCodecFactory(MessageDecoder decoder, MessageEncoder<BaseServerPacket> encoder) {
-        addMessageDecoder(decoder);
-        addMessageEncoder(BaseServerPacket.class, encoder);
+        this.addMessageDecoder(decoder);
+        this.addMessageEncoder(BaseServerPacket.class, encoder);
     }
 }

@@ -19,4 +19,7 @@ public abstract class BaseClientPacket extends BasePacket {
     }
 
     abstract public void perform();
+
+    public void initContext() {
+    }
 }
