@@ -29,15 +29,15 @@ public class ProtocolDecoder implements MessageDecoder {
     @Override
     public MessageDecoderResult decodable(IoSession session, IoBuffer in) {
         int remaining = in.remaining();
+        if (remaining < 6) {
+            return MessageDecoderResult.NOT_OK;
+        }
         int opcode = in.getShort();
         int len = in.getInt();
         int lastRemaining = in.remaining();
         System.out.println(remaining + "\t" + opcode + "\t" + len + "\t" + lastRemaining);
-        if (remaining < 6) {
-            return MessageDecoderResult.NOT_OK;
-        }
         if (lastRemaining < len) {
-            return MessageDecoderResult.NEED_DATA;
+            return MessageDecoderResult.NOT_OK;
         }
         return MessageDecoderResult.OK;
     }
