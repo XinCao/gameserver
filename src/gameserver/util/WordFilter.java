@@ -25,12 +25,12 @@ public class WordFilter {
     private static final Logger logger = LoggerFactory.getLogger(WordFilter.class);
     private String[] badnum = new String[]{"64", "722", "89"};
 
-    public WordFilter(String filePath) {
-        this.loadFromFile(filePath);
+    public WordFilter(String fileName) {
+        this.loadFromFile(fileName);
     }
 
-    private void loadFromFile(String filePath) {
-        ArrayList<String> list = this.readFile(filePath);
+    private void loadFromFile(String fileName) {
+        ArrayList<String> list = this.readFile(fileName);
         if (list == null || list.isEmpty()) {
             return;
         }
@@ -87,13 +87,13 @@ public class WordFilter {
         return replaced;
     }
 
-    private ArrayList<String> readFile(String filePath) {
+    private ArrayList<String> readFile(String fileName) {
         ArrayList<String> list = new ArrayList<String>();
         InputStream inputStream = null;
         InputStreamReader inputStreamReader = null;
         BufferedReader br = null;
         try {
-            inputStream = new FileInputStream(filePath);
+            inputStream = new FileInputStream(fileName);
             inputStreamReader = new InputStreamReader(inputStream, "UTF8");
             br = new BufferedReader(inputStreamReader);
             String temp;

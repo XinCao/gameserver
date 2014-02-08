@@ -36,7 +36,7 @@ public class Table<T extends BaseTableRow> {
     public void setTable(List<? extends BaseTableRow> list) {
         this.table = this.listToMap(list);
     }
-    
+
     private Map<Integer, T> listToMap(List<? extends BaseTableRow> list) {
         Map<Integer, T> t = new HashMap<Integer, T>();
         for (BaseTableRow b : list) {
