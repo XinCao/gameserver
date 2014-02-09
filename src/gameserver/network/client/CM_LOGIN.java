@@ -5,9 +5,6 @@ import gameserver.service.PlayerService;
 import gameserver.model.player.Player;
 import gameserver.model.World;
 import gameserver.network.core.BaseClientPacket;
-import gameserver.network.core.PacketKind;
-import gameserver.network.core.PacketManager;
-import gameserver.network.server.SM_LOGIN;
 
 /**
  *
@@ -36,7 +33,6 @@ public class CM_LOGIN extends BaseClientPacket {
     @Override
     public void perform() {
         this.initContext();
-        SM_LOGIN sm_login = PacketManager.getPacketByOpcode(PacketKind.SM_LOGIN.getOpcode());
         if (key.equals("caoxin")) {
             this.player = new Player();
             this.player.setKey(this.key);
@@ -44,11 +40,8 @@ public class CM_LOGIN extends BaseClientPacket {
             this.playerService.initPlayer(this.player);
             World.joinWorld(player);
             this.ioSession.setAttribute("currentPlayer", player);
-            sm_login.init(1);
         } else {
-            sm_login.init(-1);
         }
-        this.ioSession.write(sm_login);
     }
 
     @Override

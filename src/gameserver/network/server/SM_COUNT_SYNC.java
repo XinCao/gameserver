@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import gameserver.network.core.BaseServerPacket;
+import gameserver.network.core.PacketKind;
 import org.apache.mina.core.buffer.IoBuffer;
 
 /**
@@ -20,21 +21,13 @@ public class SM_COUNT_SYNC extends BaseServerPacket {
 
     private List<Int3> cds;
 
-    @Override
-    protected void writeImp(IoBuffer ioBuffer) {
-        ioBuffer.putInt(cds.size());
-        for (Int3 ip : cds) {
-            ioBuffer.putInt(ip.param1());
-            ioBuffer.putInt(ip.param2());
-            ioBuffer.putInt(ip.param3());
-        }
-    }
-
-    public void init(Int3 int3) {
+    public SM_COUNT_SYNC(Int3 int3) {
+        super(PacketKind.SM_COUNT_SYNC);
         this.cds = Collections.singletonList(int3);
     }
 
-    public void init(Player player) {
+    public SM_COUNT_SYNC(Player player) {
+        super(PacketKind.SM_COUNT_SYNC);
         if (player == null) {
             return;
         }
@@ -46,6 +39,16 @@ public class SM_COUNT_SYNC extends BaseServerPacket {
             if (id.isSync()) {
                 cds.add(new Int3(id.value(), countmap.get(id).cur, countmap.get(id).max));
             }
+        }
+    }
+
+    @Override
+    protected void writeImp(IoBuffer ioBuffer) {
+        ioBuffer.putInt(cds.size());
+        for (Int3 ip : cds) {
+            ioBuffer.putInt(ip.param1());
+            ioBuffer.putInt(ip.param2());
+            ioBuffer.putInt(ip.param3());
         }
     }
 }

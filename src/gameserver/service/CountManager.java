@@ -3,8 +3,6 @@ package gameserver.service;
 import gameserver.model.Int3;
 import gameserver.model.player.Player;
 import java.util.Map;
-import gameserver.network.core.PacketKind;
-import gameserver.network.core.PacketManager;
 import gameserver.network.server.SM_COUNT_SYNC;
 import java.util.EnumMap;
 import org.slf4j.Logger;
@@ -78,8 +76,7 @@ public class CountManager {
     public void setCount(CountId id, int cur) {
         CountInfo ci = countMap.get(id);
         ci.cur = cur;
-        SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
-        sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+        SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
         player.sendPacket(sm_count_sync);
     }
 
@@ -93,8 +90,7 @@ public class CountManager {
             if (hasCount(id)) {
                 countMap.get(id).cur -= 1;
                 if (id.isSync() && player != null) {
-                    SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
-                    sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                    SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
                     player.sendPacket(sm_count_sync);
                 }
             } else {
@@ -118,8 +114,7 @@ public class CountManager {
         if (!id.isUpperLimited()) {
             countMap.get(id).max += count;
             if (id.isSync() && player != null) {
-                SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
-                sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
                 player.sendPacket(sm_count_sync);
             }
             return true;
@@ -127,8 +122,7 @@ public class CountManager {
             countMap.get(id).max += count;
             countMap.get(id).cur += count;
             if (id.isSync() && player != null) {
-                SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
-                sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
                 player.sendPacket(sm_count_sync);
             }
             return true;
@@ -145,8 +139,7 @@ public class CountManager {
             if (notFull(id)) {
                 countMap.get(id).cur += 1;
                 if (id.isSync() && player != null) {
-                    SM_COUNT_SYNC sm_count_sync = PacketManager.getPacketByOpcode(PacketKind.SM_COUNT_SYNC.getOpcode());
-                    sm_count_sync.init(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                    SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
                     player.sendPacket(sm_count_sync);
                 }
             }
