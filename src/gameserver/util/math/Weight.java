@@ -1,4 +1,4 @@
-package gameserver.util;
+package gameserver.util.math;
 
 /**
  *

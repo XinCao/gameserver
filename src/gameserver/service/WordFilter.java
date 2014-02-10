@@ -1,4 +1,4 @@
-package gameserver.util;
+package gameserver.service;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

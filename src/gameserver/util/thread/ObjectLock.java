@@ -1,4 +1,4 @@
-package gameserver.util;
+package gameserver.util.thread;
 
 /**
  *
@@ -8,14 +8,14 @@ public class ObjectLock {
 
     private boolean locked = false;
 
-    protected boolean tryLockObject() {
+    public boolean tryLockObject() {
         if (locked) {
             return false;
         }
         return locked = true;
     }
 
-    protected void unlockObject() {
+    public void unlockObject() {
         locked = false;
     }
 }

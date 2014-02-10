@@ -1,5 +1,6 @@
-package gameserver.util;
+package gameserver.util.thread;
 
+import gameserver.util.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;

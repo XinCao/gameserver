@@ -1,6 +1,6 @@
 package gameserver.model;
 
-import gameserver.util.Weight;
+import gameserver.util.math.Weight;
 
 /**
  *
