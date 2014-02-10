@@ -12,7 +12,7 @@ public class ValidateString {
 
     private static final Pattern mailPattern = Pattern.compile("(?:\\w[-.\\w]*\\w@\\w[-._\\w]*\\w\\.\\w{2,3}$)");
     
-    public static Matcher getMailMatcher(String mailStr) {
+    private static Matcher getMailMatcher(String mailStr) {
         return mailPattern.matcher(mailStr);
     }
     

@@ -23,7 +23,7 @@ public class CM_LOGIN extends BaseClientPacket {
         StringBuilder sb = new StringBuilder();
         int lenght = byteBuffer.getInt();
         for (int i = 0; i < lenght; i++) {
-            sb.append((char) (byteBuffer.get()));
+            sb.append(byteBuffer.getChar());
         }
         this.key = sb.toString();
     }

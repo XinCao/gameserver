@@ -9,5 +9,6 @@
             <value>./data/blockWord.txt</value>
         </constructor-arg>
     </bean>
+    <bean id="playerService" class="gameserver.service.PlayerService"/>
 
 </beans>
