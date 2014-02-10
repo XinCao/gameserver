@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import gameserver.network.core.BaseServerPacket;
+import gameserver.network.core.PacketKind;
 import java.util.Map;
 import org.apache.mina.core.buffer.IoBuffer;
 
@@ -20,18 +21,8 @@ public class SM_COOLDOWN extends BaseServerPacket {
 
     private List<IntPair> cds;
 
-    @Override
-    protected void writeImp(IoBuffer ioBuffer) {
-        ioBuffer.putInt(cds.size());
-        int curTime = GameTime.getInstance().currentTimeSecond();
-        for (IntPair ip : cds) {
-            ioBuffer.putInt(ip.param1());
-            int ntime = ip.param2() - curTime;
-            ioBuffer.putInt(ntime > 0 ? ntime : 0);
-        }
-    }
-
-    public void init(Player player) {
+    public SM_COOLDOWN(Player player) {
+        super(PacketKind.SM_COOLDOWN);
         if (player == null) {
             return;
         }
@@ -47,7 +38,19 @@ public class SM_COOLDOWN extends BaseServerPacket {
         }
     }
 
-    public void init(Player player, IntPair intPair) {
+    public SM_COOLDOWN(Player player, IntPair intPair) {
+        super(PacketKind.SM_COOLDOWN);
         this.cds = Collections.singletonList(intPair);
+    }
+
+    @Override
+    protected void writeImp(IoBuffer ioBuffer) {
+        ioBuffer.putInt(cds.size());
+        int curTime = GameTime.getInstance().currentTimeSecond();
+        for (IntPair ip : cds) {
+            ioBuffer.putInt(ip.param1());
+            int ntime = ip.param2() - curTime;
+            ioBuffer.putInt(ntime > 0 ? ntime : 0);
+        }
     }
 }

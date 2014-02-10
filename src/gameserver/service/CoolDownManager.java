@@ -3,8 +3,6 @@ package gameserver.service;
 import gameserver.config.PlayerConfig;
 import gameserver.model.IntPair;
 import gameserver.model.player.Player;
-import gameserver.network.core.PacketKind;
-import gameserver.network.core.PacketManager;
 import gameserver.network.server.SM_COOLDOWN;
 import java.util.EnumMap;
 import java.util.Map;
@@ -41,8 +39,7 @@ public class CoolDownManager {
     public void setCoolDown(CoolDownId coolid, int cooltime) {
         coolmap.put(coolid, GameTime.getInstance().currentTimeSecond() + cooltime);
         if (coolid.isSync() && onwer != null) {
-            SM_COOLDOWN sm_cooldown = PacketManager.getPacketByOpcode(PacketKind.SM_COOLDOWN.getOpcode());
-            sm_cooldown.init(this.onwer, new IntPair(coolid.value(), onwer.getCoolManager().getCoolDown(coolid)));
+            SM_COOLDOWN sm_cooldown = new SM_COOLDOWN(this.onwer, new IntPair(coolid.value(), onwer.getCoolManager().getCoolDown(coolid)));
             onwer.sendPacket(sm_cooldown);
         }
     }

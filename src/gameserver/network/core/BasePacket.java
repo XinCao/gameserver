@@ -13,10 +13,10 @@ import org.springframework.context.ApplicationContext;
 public abstract class BasePacket implements Cloneable {
 
     protected Logger logger = LoggerFactory.getLogger(this.getClass());
-    private short opcode;
+    protected short opcode;
     protected ApplicationContext ac;
-    private PacketType packetType;
-    private Status status;
+    protected PacketType packetType;
+    protected Status status;
     protected IoSession ioSession;
     protected Player player;
 
