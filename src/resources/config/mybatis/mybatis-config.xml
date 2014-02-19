@@ -7,5 +7,6 @@
         <mapper resource="resources/config/mybatis/ItemLogMapper.xml" />
         <mapper resource="resources/config/mybatis/ItemTemplateRowMapper.xml" />
         <mapper resource="resources/config/mybatis/CountMapper.xml" />
+        <mapper resource="resources/config/mybatis/CoolDownMapper.xml" />
     </mappers>
 </configuration>

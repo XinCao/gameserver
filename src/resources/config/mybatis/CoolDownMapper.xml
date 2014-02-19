@@ -1,44 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="gameserver.dao.CountMapper">
-    <resultMap id="countMap" type="gameserver.model.Count">
+<mapper namespace="gameserver.dao.CoolDownMapper">
+    <resultMap id="coolDownMap" type="gameserver.model.CoolDown">
         <result property="id" column="id" />
         <result property="playerId" column="player_id"/>
         <result property="count" column="count" />
         <result property="cur" column="cur" />
-        <result property="max" column="max" />
+        <result property="value" column="value" />
     </resultMap>
-    <insert id="insertCount" parameterType="gameserver.model.Count" flushCache="true">
-        INSERT INTO count (`player_id`, `count`, `cur`, `max`) VALUES (#{playerId}, #{count}, #{cur}, #{max})
+    <insert id="insertCoolDown" parameterType="gameserver.model.CoolDown" flushCache="true">
+        INSERT INTO cooldown (`player_id`, `count`, `cur`, `value`) VALUES (#{playerId}, #{count}, #{cur}, #{value})
     </insert>
-    <delete id="deleteCount" parameterType="gameserver.model.Count">
-        DELETE FROM count
+    <delete id="deleteCoolDown" parameterType="gameserver.model.CoolDown">
+        DELETE FROM cooldown
         <where>
             <if test="playerId != null">and player_id=#{playerId}</if>
             <if test="count != null">and count=#{count}</if>
         </where>
     </delete>
-    <update id="updateCount" parameterType="gameserver.model.count">
-        UPDATE count SET
+    <update id="updateCoolDown" parameterType="gameserver.model.CoolDown">
+        UPDATE cooldown SET
         <set>
             <if test="cur != null">`cur`=#{cur},</if>
-            <if test="max != null">`max`=#{max},</if>
+            <if test="value != null">`value`=#{value},</if>
         </set>
         <where>
             <if test="playerId != null">and player_id=#{playerId}</if>
             <if test="count != null">and count=#{count}</if>
         </where>
     </update>
-    <select id="selectCount" parameterType="gameserver.model.Count" resultType="countMap">
-        SELECT `id`, `player_id`, `count`, `cur`, `max` from count
+    <select id="selectCoolDown" parameterType="gameserver.model.CoolDown" resultType="coolDownMap">
+        SELECT `id`, `player_id`, `count`, `cur`, `value` from cooldown
         <where>
             <if test="playerId != null">and player_id=#{playerId}</if>
             <if test="count != null">and count=#{count}</if>
         </where>
         limit 1
     </select>
-    <select id="selectCountList" parameterType="gameserver.model.Count" resultType="countMap">
-        SELECT `id`, `player_id`, `count`, `cur`, `max` from count
+    <select id="selectCoolDownList" parameterType="gameserver.model.CoolDown" resultType="coolDownMap">
+        SELECT `id`, `player_id`, `count`, `cur`, `value` from cooldown
         <where>
             <if test="playerId != null">and player_id=#{playerId}</if>
             <if test="count != null">and count=#{count}</if>

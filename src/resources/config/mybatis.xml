@@ -95,4 +95,9 @@
             <value>gameserver.dao.CountMapper</value>
         </property>
     </bean>
+    <bean id="coolDownMapper" class="org.mybatis.spring.mapper.MapperFactoryBean" autowire="byType">
+        <property name="mapperInterface">
+            <value>gameserver.dao.CoolDownMapper</value>
+        </property>
+    </bean>
 </beans>

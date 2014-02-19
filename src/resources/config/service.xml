@@ -15,5 +15,10 @@
             <ref bean="countMapper"/>
         </property>
     </bean>
+    <bean id="coolDownService" class="gameserver.service.CoolDownService">
+        <property name="coolDownMapper">
+            <ref bean="coolDownMapper"/>
+        </property>
+    </bean>
 
 </beans>

@@ -21,6 +21,20 @@ public class CoolDownManager {
     private long longCDOperator = 0L;
     private long shortCDOperator = 0L;
 
+    /**
+     * 以后会添加这个类，用来扩展，冷却功能（玩家可以通过购买冷却）
+     */
+    public static class CoolDownInfo {
+
+        private int cur;
+        private int value;
+
+        public CoolDownInfo(int cur, int value) {
+            this.cur = cur;
+            this.value = value;
+        }
+    }
+
     public Map<CoolDownId, Integer> getCoolMap() {
         return coolmap;
     }
@@ -39,7 +53,7 @@ public class CoolDownManager {
     public void setCoolDown(CoolDownId coolid, int cooltime) {
         coolmap.put(coolid, GameTime.getInstance().currentTimeSecond() + cooltime);
         if (coolid.isSync() && onwer != null) {
-            SM_COOLDOWN sm_cooldown = new SM_COOLDOWN(this.onwer, new IntPair(coolid.value(), onwer.getCoolManager().getCoolDown(coolid)));
+            SM_COOLDOWN sm_cooldown = new SM_COOLDOWN(this.onwer, new IntPair(coolid.count(), onwer.getCoolManager().getCoolDown(coolid)));
             onwer.sendPacket(sm_cooldown);
         }
     }
@@ -65,7 +79,7 @@ public class CoolDownManager {
             return true;
         } else {
             setCoolDown(coolid, 0);
-            logger.debug("企图测试一种不存在的CoolDown: name={}, id={}", coolid, coolid.value());
+            logger.debug("企图测试一种不存在的CoolDown: name={}, id={}", coolid, coolid.count());
             return false;
         }
     }

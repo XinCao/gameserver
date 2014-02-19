@@ -44,6 +44,9 @@ public class CountService {
         int playerId = count.getPlayerId();
         Set<Entry<CountId, CountInfo>> entry = countManager.getCountMap().entrySet();
         for (Entry<CountId, CountInfo> e : entry) {
+            if (!e.getKey().saveToDB) {
+                continue;
+            }
             Count c = new Count();
             c.setPlayerId(playerId);
             c.setCount(e.getKey().count());

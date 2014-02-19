@@ -33,7 +33,7 @@ public class SM_COOLDOWN extends BaseServerPacket {
             CoolDownId id = it.next();
             if (id.isSync()) {
                 int ctime = coolmap.get(id);
-                cds.add(new IntPair(id.value(), ctime));
+                cds.add(new IntPair(id.count(), ctime));
             }
         }
     }
