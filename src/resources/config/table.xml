@@ -4,12 +4,9 @@
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
 ">
-    <bean id="itemTemplateRowMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+    <bean id="itemTemplateRowMapper" class="org.mybatis.spring.mapper.MapperFactoryBean" autowire="byType">
         <property name="mapperInterface">
             <value>gameserver.dao.core.tab.ItemTemplateRowMapper</value>
-        </property>
-        <property name="sqlSessionFactory">
-            <ref bean="sqlSessionFactory"/>
         </property>
     </bean>
     <bean id="tableService" class="gameserver.service.TableService" init-method="loadAllTable">

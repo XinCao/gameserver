@@ -37,7 +37,7 @@ public class SM_COUNT_SYNC extends BaseServerPacket {
         while (it.hasNext()) {
             CountId id = it.next();
             if (id.isSync()) {
-                cds.add(new Int3(id.value(), countmap.get(id).cur, countmap.get(id).max));
+                cds.add(new Int3(id.count(), countmap.get(id).cur, countmap.get(id).max));
             }
         }
     }

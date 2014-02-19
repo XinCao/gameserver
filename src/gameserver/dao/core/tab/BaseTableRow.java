@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
  */
 public abstract class BaseTableRow {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     public abstract int getId();
 

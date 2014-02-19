@@ -13,7 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- *
+ * 加载配置表类（核心）
+ * 
  * @author caoxin
  */
 public class TableService {
@@ -67,7 +68,7 @@ public class TableService {
     }
 
     /**
-     * 加载所有配置表，且，也可以更新所有配置表
+     * 加载所有配置表
      */
     public void loadAllTable() {
         for (TableKind k : TableKind.tableKinds) {

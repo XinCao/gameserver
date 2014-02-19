@@ -21,14 +21,14 @@ public class CountManager {
     /**
      * 内部类，存放玩家最大次数和当前次数信息
      */
-    public class CountInfo {
-
-        public int max;
+    public static class CountInfo {
+        
         public int cur;
+        public int max;
 
         public CountInfo(int c, int m) {
-            max = m;
             cur = c;
+            max = m;
         }
     }
 
@@ -63,6 +63,12 @@ public class CountManager {
     }
 
     /**
+     * 新用户初始化计数（通过默认配置）
+     */
+    public void newPlayer() {
+        this.resetCount(CountId.CAST_TEST);
+    }
+    /**
      * 重置一种计数
      *
      * @param id
@@ -72,11 +78,20 @@ public class CountManager {
         int current = id.isUpperLimited() ? max : 0;
         countMap.put(id, new CountInfo(current, max));
     }
+    
+    /**
+     * 重置计数（使用默认配置）
+     * 
+     * @param id 
+     */
+    public void resetCount(CountId id) {
+        this.resetCount(id, id.value());
+    }
 
     public void setCount(CountId id, int cur) {
         CountInfo ci = countMap.get(id);
         ci.cur = cur;
-        SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+        SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.count(), countMap.get(id).cur, countMap.get(id).max));
         player.sendPacket(sm_count_sync);
     }
 
@@ -90,11 +105,11 @@ public class CountManager {
             if (hasCount(id)) {
                 countMap.get(id).cur -= 1;
                 if (id.isSync() && player != null) {
-                    SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                    SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.count(), countMap.get(id).cur, countMap.get(id).max));
                     player.sendPacket(sm_count_sync);
                 }
             } else {
-                log.error("企图消耗一种错误的Count " + id.value());
+                log.error("企图消耗一种错误的Count " + id.count());
             }
         }
     }
@@ -108,13 +123,13 @@ public class CountManager {
      */
     public boolean addMultiBuyCount(CountId id, int count) {
         if (!countMap.containsKey(id)) {
-            log.error("购买了一种错误的Count " + id.value());
+            log.error("购买了一种错误的Count " + id.count());
             return false;
         }
         if (!id.isUpperLimited()) {
             countMap.get(id).max += count;
             if (id.isSync() && player != null) {
-                SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.count(), countMap.get(id).cur, countMap.get(id).max));
                 player.sendPacket(sm_count_sync);
             }
             return true;
@@ -122,7 +137,7 @@ public class CountManager {
             countMap.get(id).max += count;
             countMap.get(id).cur += count;
             if (id.isSync() && player != null) {
-                SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.count(), countMap.get(id).cur, countMap.get(id).max));
                 player.sendPacket(sm_count_sync);
             }
             return true;
@@ -139,7 +154,7 @@ public class CountManager {
             if (notFull(id)) {
                 countMap.get(id).cur += 1;
                 if (id.isSync() && player != null) {
-                    SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.value(), countMap.get(id).cur, countMap.get(id).max));
+                    SM_COUNT_SYNC sm_count_sync = new SM_COUNT_SYNC(new Int3(id.count(), countMap.get(id).cur, countMap.get(id).max));
                     player.sendPacket(sm_count_sync);
                 }
             }
@@ -157,7 +172,7 @@ public class CountManager {
             if (countMap.containsKey(id)) {
                 return countMap.get(id).max;
             } else {
-                log.error("企图测试一种不存在的Count " + id.value());
+                log.error("企图测试一种不存在的Count " + id.count());
             }
         }
         return 0;
@@ -174,7 +189,7 @@ public class CountManager {
             if (countMap.containsKey(id)) {
                 return countMap.get(id).cur;
             } else {
-                log.error("企图测试一种不存在的Count " + id.value());
+                log.error("企图测试一种不存在的Count " + id.count());
             }
         }
         return 0;
@@ -204,7 +219,7 @@ public class CountManager {
                 }
                 return false;
             } else {
-                log.error("企图测试一种不存在的Count " + id.value());
+                log.error("企图测试一种不存在的Count " + id.count());
             }
         }
 
@@ -225,7 +240,7 @@ public class CountManager {
                 }
                 return false;
             } else {
-                log.error("企图测试一种不存在的Count " + id.value());
+                log.error("企图测试一种不存在的Count " + id.count());
             }
         }
         return false;

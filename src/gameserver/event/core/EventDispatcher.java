@@ -6,9 +6,9 @@ import java.util.Iterator;
 
 public class EventDispatcher {
 
-    private HashMap listeners;
+    private HashMap listeners; // 事件监听集合（一个事件，对应一个事件监听集合）
     private EventListenerCollection globalListeners;
-    private static HashMap instances = new HashMap();
+    private static HashMap instances = new HashMap(); // 事件调度器个数
     private EventQueue queue;
 
     private EventDispatcher() {
@@ -46,9 +46,17 @@ public class EventDispatcher {
     }
 
     public void addListener(String eventName, EventListener listener) throws Exception {
-        addListener(eventName, listener, false);
+        this.addListener(eventName, listener, false);
     }
 
+    /**
+     * 增加事件监听器
+     * 
+     * @param eventName
+     * @param listener
+     * @param autoRemove
+     * @throws Exception 
+     */
     public void addListener(String eventName, EventListener listener, boolean autoRemove) throws Exception {
         if (!listeners.containsKey(eventName)) {
             listeners.put(eventName, new EventListenerCollection());
@@ -122,42 +130,43 @@ public class EventDispatcher {
         }
     }
 
-    public Event triggerEvent(Event e)
-            throws Exception {
+    public Event triggerEvent(Event e) throws Exception {
         return propagate(e, false);
     }
 
-    public Event triggerEvent(Event e, boolean queue)
-            throws Exception {
+    public Event triggerEvent(Event e, boolean queue) throws Exception {
         return propagate(e, queue);
     }
 
-    public Event triggerEvent(String name)
-            throws Exception {
+    public Event triggerEvent(String name) throws Exception {
         Event e = new Event(name);
         return propagate(e, false);
     }
 
-    public Event triggerEvent(String name, boolean queue)
-            throws Exception {
+    public Event triggerEvent(String name, boolean queue) throws Exception {
         Event e = new Event(name);
         return propagate(e, queue);
     }
 
-    public Event triggerEvent(String name, boolean queue, Object context)
-            throws Exception {
+    public Event triggerEvent(String name, boolean queue, Object context) throws Exception {
         Event e = new Event(name, context);
         return propagate(e, queue);
     }
 
-    public Event triggerEvent(String name, boolean queue, Object context, Object userInfo)
-            throws Exception {
+    public Event triggerEvent(String name, boolean queue, Object context, Object userInfo) throws Exception {
         Event e = new Event(name, context, userInfo);
         return propagate(e, queue);
     }
 
-    private Event propagate(Event e, boolean queue)
-            throws Exception {
+    /**
+     * 事件触发（范围：事件对应的监听集合）
+     * 
+     * @param e
+     * @param queue
+     * @return
+     * @throws Exception 
+     */
+    private Event propagate(Event e, boolean queue) throws Exception {
         if (listeners.containsKey(e.getName())) {
             EventListenerCollection col = (EventListenerCollection) listeners.get(e.getName());
             col.propagate(e);

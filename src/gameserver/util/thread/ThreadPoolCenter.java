@@ -1,7 +1,5 @@
 package gameserver.util.thread;
 
-import gameserver.util.*;
-
 /**
  * 定义线程池
  *

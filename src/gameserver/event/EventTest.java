@@ -5,7 +5,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.FileSystemXmlApplicationContext;
 
 /**
- * 事件分发
+ * 事件分发 （部分地方，可能在高负载的情况下，存在线程安全的问题）
  * @author caoxin
  */
 public class EventTest {

@@ -5,7 +5,7 @@
         http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
 ">
 
-    <bean id="internalEventDispatcher" class="gameserver.event.core.EventDispatcher" factory-method="getInstance"></bean>
+    <bean id="internalEventDispatcher" class="gameserver.event.core.EventDispatcher" factory-method="getInstance"/>
   
     <bean id="dispatcher" class="gameserver.event.dispatcher.GameEventDispatcher">
         <constructor-arg ref="internalEventDispatcher" />

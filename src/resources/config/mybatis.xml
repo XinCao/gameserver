@@ -90,13 +90,9 @@
             <value>config/mybatis/mybatis-config.xml</value>
         </property>
     </bean>
-    <bean id="itemLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">  
+    <bean id="countMapper" class="org.mybatis.spring.mapper.MapperFactoryBean" autowire="byType">
         <property name="mapperInterface">
-            <value>gameserver.dao.ItemLogMapper</value>
-        </property>
-        <property name="sqlSessionFactory">
-            <ref bean="sqlSessionFactory"/>
+            <value>gameserver.dao.CountMapper</value>
         </property>
     </bean>
-
 </beans>

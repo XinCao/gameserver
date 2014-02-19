@@ -10,5 +10,10 @@
         </constructor-arg>
     </bean>
     <bean id="playerService" class="gameserver.service.PlayerService"/>
+    <bean id="countService" class="gameserver.service.CountService">
+        <property name="countMapper">
+            <ref bean="countMapper"/>
+        </property>
+    </bean>
 
 </beans>

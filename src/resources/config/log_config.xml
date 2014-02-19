@@ -4,6 +4,11 @@
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
 ">
-    <bean id="logServiceWithDatabase" class="gameserver.log.LogServiceImplementWithDatabase"/>
+     <bean id="itemLogMapper" class="org.mybatis.spring.mapper.MapperFactoryBean" autowire="byType">
+        <property name="mapperInterface">
+            <value>gameserver.dao.ItemLogMapper</value>
+        </property>
+    </bean>
+    <bean id="logServiceWithDatabase" class="gameserver.log.LogServiceImplementWithDatabase" autowire="byType"/>
     <bean id="logServiceWithLogback" class="gameserver.log.LogServiceImplementWithLogback"/>
 </beans>

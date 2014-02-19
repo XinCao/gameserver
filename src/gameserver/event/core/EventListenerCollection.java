@@ -6,7 +6,7 @@ import java.util.Iterator;
 public class EventListenerCollection {
 
     private ArrayList listeners;
-    
+
     public EventListenerCollection() {
         listeners = new ArrayList();
     }
@@ -18,8 +18,14 @@ public class EventListenerCollection {
         return listeners.size();
     }
 
-    public Event propagate(Event e)
-            throws Exception {
+    /**
+     * 事件触发（范围：事件对应的监听集合）
+     * 
+     * @param e
+     * @return
+     * @throws Exception 
+     */
+    public Event propagate(Event e) throws Exception {
         ArrayList remove = new ArrayList();
         int i = 0;
         do {
