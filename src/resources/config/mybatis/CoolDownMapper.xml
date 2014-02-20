@@ -6,10 +6,10 @@
         <result property="playerId" column="player_id"/>
         <result property="count" column="count" />
         <result property="cur" column="cur" />
-        <result property="value" column="value" />
+        <result property="interval" column="interval" />
     </resultMap>
     <insert id="insertCoolDown" parameterType="gameserver.model.CoolDown" flushCache="true">
-        INSERT INTO cooldown (`player_id`, `count`, `cur`, `value`) VALUES (#{playerId}, #{count}, #{cur}, #{value})
+        INSERT INTO cooldown (`player_id`, `count`, `cur`, `interval`) VALUES (#{playerId}, #{count}, #{cur}, #{interval})
     </insert>
     <delete id="deleteCoolDown" parameterType="gameserver.model.CoolDown">
         DELETE FROM cooldown
@@ -22,7 +22,7 @@
         UPDATE cooldown SET
         <set>
             <if test="cur != null">`cur`=#{cur},</if>
-            <if test="value != null">`value`=#{value},</if>
+            <if test="interval != null">`interval`=#{interval},</if>
         </set>
         <where>
             <if test="playerId != null">and player_id=#{playerId}</if>
@@ -30,7 +30,7 @@
         </where>
     </update>
     <select id="selectCoolDown" parameterType="gameserver.model.CoolDown" resultType="coolDownMap">
-        SELECT `id`, `player_id`, `count`, `cur`, `value` from cooldown
+        SELECT `id`, `player_id`, `count`, `cur`, `interval` from cooldown
         <where>
             <if test="playerId != null">and player_id=#{playerId}</if>
             <if test="count != null">and count=#{count}</if>
@@ -38,7 +38,7 @@
         limit 1
     </select>
     <select id="selectCoolDownList" parameterType="gameserver.model.CoolDown" resultType="coolDownMap">
-        SELECT `id`, `player_id`, `count`, `cur`, `value` from cooldown
+        SELECT `id`, `player_id`, `count`, `cur`, `interval` from cooldown
         <where>
             <if test="playerId != null">and player_id=#{playerId}</if>
             <if test="count != null">and count=#{count}</if>

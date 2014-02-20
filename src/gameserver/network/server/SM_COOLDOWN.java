@@ -1,15 +1,15 @@
 package gameserver.network.server;
 
-import gameserver.model.IntPair;
+import gameserver.model.Int3;
 import gameserver.model.player.Player;
 import gameserver.service.CoolDownId;
-import gameserver.service.GameTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import gameserver.network.core.BaseServerPacket;
 import gameserver.network.core.PacketKind;
+import gameserver.service.CoolDownManager.CoolDownInfo;
 import java.util.Map;
 import org.apache.mina.core.buffer.IoBuffer;
 
@@ -19,38 +19,37 @@ import org.apache.mina.core.buffer.IoBuffer;
  */
 public class SM_COOLDOWN extends BaseServerPacket {
 
-    private List<IntPair> cds;
+    private List<Int3> cds;
 
     public SM_COOLDOWN(Player player) {
         super(PacketKind.SM_COOLDOWN);
         if (player == null) {
             return;
         }
-        cds = new ArrayList<IntPair>();
-        Map<CoolDownId, Integer> coolmap = player.getCoolManager().getCoolMap();
+        cds = new ArrayList<Int3>();
+        Map<CoolDownId, CoolDownInfo> coolmap = player.getCoolManager().getCoolMap();
         Iterator<CoolDownId> it = coolmap.keySet().iterator();
         while (it.hasNext()) {
             CoolDownId id = it.next();
             if (id.isSync()) {
-                int ctime = coolmap.get(id);
-                cds.add(new IntPair(id.count(), ctime));
+                CoolDownInfo cdi = coolmap.get(id);
+                cds.add(new Int3(id.count(), cdi.cur, cdi.interval));
             }
         }
     }
 
-    public SM_COOLDOWN(Player player, IntPair intPair) {
+    public SM_COOLDOWN(Player player, Int3 int3) {
         super(PacketKind.SM_COOLDOWN);
-        this.cds = Collections.singletonList(intPair);
+        this.cds = Collections.singletonList(int3);
     }
 
     @Override
     protected void writeImp(IoBuffer ioBuffer) {
         ioBuffer.putInt(cds.size());
-        int curTime = GameTime.getInstance().currentTimeSecond();
-        for (IntPair ip : cds) {
-            ioBuffer.putInt(ip.param1());
-            int ntime = ip.param2() - curTime;
-            ioBuffer.putInt(ntime > 0 ? ntime : 0);
+        for (Int3 int3 : cds) {
+            ioBuffer.putInt(int3.param1());
+            ioBuffer.putInt(int3.param2());
+            ioBuffer.putInt(int3.param3());
         }
     }
 }

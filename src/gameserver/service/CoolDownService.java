@@ -2,6 +2,7 @@ package gameserver.service;
 
 import gameserver.dao.CoolDownMapper;
 import gameserver.model.CoolDown;
+import gameserver.service.CoolDownManager.CoolDownInfo;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -25,9 +26,9 @@ public class CoolDownService {
      */
     public CoolDownManager loadCoolDownManager(CoolDownManager coolDownManager, CoolDown cooldown) {
         List<CoolDown> cooldownList = this.loadCoolDownList(cooldown);
-        Map<CoolDownId, Integer> coolMap = coolDownManager.getCoolMap();
+        Map<CoolDownId, CoolDownInfo> coolMap = coolDownManager.getCoolMap();
         for (CoolDown c : cooldownList) {
-            coolMap.put(CoolDownId.fromInt(c.getCount()), c.getCur());
+            coolMap.put(CoolDownId.fromInt(c.getCount()), new CoolDownInfo(c.getCur(), c.getInterval()));
         }
         return coolDownManager;
     }
@@ -40,15 +41,16 @@ public class CoolDownService {
      */
     public void saveCoolDownManager(CoolDownManager coolDownManager, CoolDown cooldown) {
         int playerId = cooldown.getPlayerId();
-        Set<Entry<CoolDownId, Integer>> entry = coolDownManager.getCoolMap().entrySet();
-        for (Entry<CoolDownId, Integer> e : entry) {
+        Set<Entry<CoolDownId, CoolDownInfo>> entry = coolDownManager.getCoolMap().entrySet();
+        for (Entry<CoolDownId, CoolDownInfo> e : entry) {
             if (!e.getKey().isSave()) {
                 continue;
             }
             CoolDown c = new CoolDown();
             c.setPlayerId(playerId);
             c.setCount(e.getKey().count());
-            c.setCur(e.getValue());
+            c.setCur(e.getValue().cur);
+            c.setInterval(e.getValue().interval);
             coolDownMapper.updateCoolDown(c);
         }
     }

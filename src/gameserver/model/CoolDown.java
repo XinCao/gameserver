@@ -10,7 +10,7 @@ public class CoolDown {
     private int playerId;
     private int count; // 类型编号
     private int cur; // 冷却苏醒时间
-    private int value; // 对应CoolDownId中value,这个值可以通过购买来替换默认值
+    private int interval;
 
     public int getId() {
         return id;
@@ -44,11 +44,11 @@ public class CoolDown {
         this.cur = cur;
     }
 
-    public int getValue() {
-        return value;
+    public int getInterval() {
+        return interval;
     }
 
-    public void setValue(int value) {
-        this.value = value;
+    public void setInterval(int interval) {
+        this.interval = interval;
     }
 }

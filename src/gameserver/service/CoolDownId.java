@@ -11,13 +11,13 @@ public enum CoolDownId {
     private int count; // 冷却编号
     private boolean saveToDB; // 是否需要存盘
     private boolean syncToClient; // 是否需要同步给客户端
-    private int value;
+    private int interval; // 默认冷却间隔时间，单位（秒）
 
-    private CoolDownId(int count, boolean saveToDB, boolean syncToClient, int value) {
+    private CoolDownId(int count, boolean saveToDB, boolean syncToClient, int interval) {
         this.count = count;
         this.saveToDB = saveToDB;
         this.syncToClient = syncToClient;
-        this.value = value;
+        this.interval = interval;
     }
 
     public int count() {
@@ -32,8 +32,8 @@ public enum CoolDownId {
         return this.syncToClient;
     }
     
-    public int value() {
-        return this.value;
+    public int interval() {
+        return this.interval;
     }
 
     public static CoolDownId fromInt(int count) {
