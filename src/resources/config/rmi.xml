@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+">
+    <!-- RMI Service 配置 -->
+    <bean id = "remoteRmiServiceImp" class="gameserver.rmi.local.impl.RemoteRmiServiceImp" />
+    <bean id="rmiServiceExporter" class="org.springframework.remoting.rmi.RmiServiceExporter" destroy-method="destroy">
+        <property name="serviceName" value="remoteRmiService" />
+        <property name="serviceInterface">
+            <value>gameserver.rmi.local.RemoteRmiService</value>
+        </property>
+        <property name="service">
+            <ref bean="remoteRmiServiceImp" />
+        </property>
+        <property name="registryPort" value="${rmi.remote.port}" />
+    </bean>
+
+    <!--  RMI远程调用配置 -->
+    <bean id="localRmiService" class="org.springframework.remoting.rmi.RmiProxyFactoryBean">
+        <property name="serviceUrl" value="rmi://${rmi.local.ip}:${rmi.local.port}/${rmi.local.serviceName}" />
+        <property name="serviceInterface" value="gameserver.rmi.remote.IRmiCallService" />
+    </bean>
+</beans>

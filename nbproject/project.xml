@@ -3,7 +3,7 @@
     <type>org.netbeans.modules.java.j2seproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/j2se-project/3">
-            <name>gameserver-master</name>
+            <name>gameserver</name>
             <source-roots>
                 <root id="src.src.dir"/>
             </source-roots>
@@ -12,6 +12,9 @@
         <spring-data xmlns="http://www.netbeans.org/ns/spring-data/1">
             <config-files>
                 <config-file>src/resources/config/table.xml</config-file>
+                <config-file>src/resources/config/shedule.xml</config-file>
+                <config-file>src/resources/config/rmi.xml</config-file>
+                <config-file>src/resources/config/async.xml</config-file>
             </config-files>
             <config-file-groups/>
         </spring-data>
