@@ -1,7 +1,6 @@
 package gameserver.service;
 
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
@@ -24,6 +23,10 @@ public class WordFilter {
     private Map<String, Pattern> blockedWords = new HashMap<String, Pattern>();
     private static final Logger logger = LoggerFactory.getLogger(WordFilter.class);
     private String[] badnum = new String[]{"64", "722", "89"};
+    
+    public WordFilter () {
+        this("word_filter.txt");
+    }
 
     public WordFilter(String fileName) {
         this.loadFromFile(fileName);
@@ -41,6 +44,12 @@ public class WordFilter {
         this.blockedWords = newMap;
     }
 
+    /**
+     * 包含屏蔽词，将会被替换
+     * 
+     * @param str
+     * @return 
+     */
     public String filter(String str) {
         if (this.containWord(str)) {
             str = this.filterWord(str, "*");
@@ -93,7 +102,8 @@ public class WordFilter {
         InputStreamReader inputStreamReader = null;
         BufferedReader br = null;
         try {
-            inputStream = new FileInputStream(fileName);
+            inputStream = ClassLoader.getSystemResourceAsStream(fileName);
+//            inputStream = new FileInputStream(fileName);
             inputStreamReader = new InputStreamReader(inputStream, "UTF8");
             br = new BufferedReader(inputStreamReader);
             String temp;

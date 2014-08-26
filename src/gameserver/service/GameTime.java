@@ -38,7 +38,7 @@ public class GameTime {
         this.set(cal);
     }
 
-    public void set(int year, int month, int day, int hour, int minute, int second) {
+    private void set(int year, int month, int day, int hour, int minute, int second) {
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, year);
         cal.set(Calendar.MONTH, month - 1);
@@ -50,7 +50,7 @@ public class GameTime {
         set(cal);
     }
 
-    protected void set(Calendar cal) {
+    private void set(Calendar cal) {
         currentTimeMillis = cal.getTimeInMillis();
         currentTimeSecond = currentTimeMillis / 1000;
 
